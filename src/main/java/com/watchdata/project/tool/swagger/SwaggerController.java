@@ -10,7 +10,7 @@ import com.watchdata.framework.web.controller.BaseController;
 /**
  * swagger 接口
  * 
- * @author ruoyi
+ * @author 
  */
 @Controller
 @RequestMapping("/tool/swagger")
