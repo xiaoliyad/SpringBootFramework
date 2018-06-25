@@ -4,7 +4,7 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Component;
 
 /**
- * RuoYi首创 js调用 thymeleaf 实现按钮权限可见性
+ * 首创 js调用 thymeleaf 实现按钮权限可见性
  * 
  * @author
  */

@@ -14,7 +14,7 @@ import com.watchdata.common.utils.security.ShiroUtils;
 /**
  * 验证码过滤器
  * 
- * @author ruoyi
+ * @author 
  */
 public class CaptchaValidateFilter extends AccessControlFilter
 {
