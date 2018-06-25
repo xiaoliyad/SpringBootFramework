@@ -1,19 +1,25 @@
 package com.watchdata.framework.config;
 
 import java.sql.SQLException;
+
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.support.DefaultPointcutAdvisor;
+import org.springframework.aop.support.JdkRegexpMethodPointcut;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Scope;
+
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
+import com.alibaba.druid.support.spring.stat.DruidStatInterceptor;
 
 /**
  * Druid数据库信息配置加载
@@ -156,4 +162,25 @@ public class DruidConfig
         filterRegistrationBean.addInitParameter("principalSessionName", "USER_SESSION");
         return filterRegistrationBean;
     }
+  /*  @Bean  
+    public DruidStatInterceptor druidStatInterceptor() {  
+        DruidStatInterceptor dsInterceptor = new DruidStatInterceptor();  
+        return dsInterceptor;  
+    }  
+      
+    @Bean  
+    @Scope("prototype")  
+    public JdkRegexpMethodPointcut druidStatPointcut() {  
+        JdkRegexpMethodPointcut pointcut = new JdkRegexpMethodPointcut();  
+        pointcut.setPattern("com.watchdata.project.*。*");  
+        return pointcut;  
+    }  
+      
+    @Bean  
+    public DefaultPointcutAdvisor druidStatAdvisor(DruidStatInterceptor druidStatInterceptor, JdkRegexpMethodPointcut druidStatPointcut) {  
+        DefaultPointcutAdvisor defaultPointAdvisor = new DefaultPointcutAdvisor();  
+        defaultPointAdvisor.setPointcut(druidStatPointcut);  
+        defaultPointAdvisor.setAdvice(druidStatInterceptor);  
+        return defaultPointAdvisor;  
+    }  */
 }
