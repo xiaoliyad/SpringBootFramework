@@ -55,7 +55,7 @@ a:focus {
 }
 
 .navbar-default .nav>li>a:hover, .navbar-default .nav>li>a:focus {
-    background-color: #293846;
+    background-color: #000000;
     color: white;
 }
 
@@ -73,7 +73,7 @@ a:focus {
 
 .navbar-default {
     background-color: transparent;
-    border-color: #2f4050;
+    border-color: #000000;
     position: relative;
 }
 
@@ -179,8 +179,7 @@ body.body-small .navbar-top-links li:last-child {
 }
 
 .nav-header {
-    padding: 33px 25px;
-    background: url("patterns/header-profile.png") no-repeat;
+    padding: 10px 20px;
 }
 
 .pace-done .nav-header {
@@ -189,8 +188,8 @@ body.body-small .navbar-top-links li:last-child {
 }
 
 .nav>li.active {
-    border-left: 4px solid #19aa8d;
-    background: #293846;
+    border-left: 4px solid #63a33b;
+    background: #000000;
 }
 
 .nav.nav-second-level>li.active {
@@ -310,7 +309,7 @@ body.mini-navbar .navbar-default .nav>li>.nav-second-level li a {
 }
 
 .canvas-menu.mini-navbar .nav-second-level {
-    background: #293846;
+    background: #000000;
 }
 
 .mini-navbar li.active .nav-second-level {
@@ -1161,23 +1160,23 @@ button.dim:active:before {
 }
 /* TOOLTIPS */
 .tooltip-inner {
-    background-color: #2F4050;
+    background-color: #63a33b;
 }
 
 .tooltip.top .tooltip-arrow {
-    border-top-color: #2F4050;
+    border-top-color: #63a33b;
 }
 
 .tooltip.right .tooltip-arrow {
-    border-right-color: #2F4050;
+    border-right-color: #63a33b;
 }
 
 .tooltip.bottom .tooltip-arrow {
-    border-bottom-color: #2F4050;
+    border-bottom-color: #63a33b;
 }
 
 .tooltip.left .tooltip-arrow {
-    border-left-color: #2F4050;
+    border-left-color: #63a33b;
 }
 /* EASY PIE CHART*/
 .easypiechart {
@@ -2926,7 +2925,7 @@ a.forum-item-title:hover {
     padding: 12px 10px;
     margin: 0;
     border-radius: 0;
-    background: #2f4050;
+    background: #000000;
     color: #fff;
     text-align: center;
     border-right: 1px solid #334556;
@@ -3163,7 +3162,7 @@ video {
 #wrapper {
     width: 100%;
     overflow-x: hidden;
-    background-color: #2f4050;
+    background-color: #000000;
 }
 
 .wrapper {
@@ -6640,7 +6639,7 @@ body.rtls .top-navigation .footer.fixed, body.rtls.top-navigation .footer.fixed 
 }
 
 .content-tabs {
-    border-bottom: solid 2px #2f4050;
+    border-bottom: solid 2px #63a33b;
 }
 
 .page-tabs a {
@@ -6652,12 +6651,12 @@ body.rtls .top-navigation .footer.fixed, body.rtls.top-navigation .footer.fixed 
 }
 
 .page-tabs a.active {
-    background: #2f4050;
+    background: #000000;
     color: #a7b1c2;
 }
 
 .page-tabs a.active:hover, .page-tabs a.active i:hover {
-    background: #293846;
+    background: #000000;
     color: #fff;
 }
 /*
@@ -7026,7 +7025,7 @@ body.skin-yellow {
 }
 
 .navbar-static-side {
-    background: #2f4050;
+    background: #464547;
 }
 
 .nav-close {

@@ -5,8 +5,6 @@ $(document).ready(function(){
 	$('body').layout({ west__size: 185 });
 	queryUserList();
 	queryDeptTreeDaTa();
-	//加载文件输入框
-    fileinputlist();
 });
 
 
@@ -59,9 +57,9 @@ function queryUserList() {
             align: 'center',
             formatter: function(value, row, index) {
 	    		var actions = [];
-	        	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="edit(\'' + row.userId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+	        	actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="#" onclick="edit(\'' + row.userId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
 	        	actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="remove(\'' + row.userId + '\')"><i class="fa fa-remove"></i>删除</a> ');
-	        	actions.push('<a class="btn btn-info btn-xs ' + resetPwdFlag + '" href="#" onclick="resetPwd(\'' + row.userId + '\')"><i class="fa fa-key"></i>重置</a>');
+	        	actions.push('<a class="btn btn-warning btn-xs ' + resetPwdFlag + '" href="#" onclick="resetPwd(\'' + row.userId + '\')"><i class="fa fa-key"></i>重置</a>');
 	        	return actions.join('');
             }
         }];
@@ -121,25 +119,6 @@ function queryDeptTreeDaTa()
 	$('#btnRefresh').click(function() {
 	    loadTree();
 	});
-}
-/** 初始化文件框*/
-function fileinputlist(){
-    $('#uploadfile').fileinput({
-        language: 'zh', //设置语言
-        showPreview: false,//是否显示预览,不写默认为true
-        showUpload: false, //是否显示上传按钮,跟随文本框的那个
-        showRemove : true, //显示移除按钮,跟随文本框的那个
-        showCaption: true,//是否显示标题,就是那个文本框
-        uploadAsync : false, //默认异步上传
-        elErrorContainer: '#upload-file-errors',
-        maxFileCount: 1, //表示允许同时上传的最大文件个数
-        maxFileSize: 102400,      //单位为kb，如果为0表示不限制文件大小
-        enctype: 'multipart/form-data',
-        dropZoneTitle: '拖拽文件到这里 &hellip;<br>仅仅支持单个文件同时上传',//重新定义提示
-        msgFilesTooMany: '选择上传的文件数量({n}) 超过允许的最大数值{m}！',
-        allowedFileExtensions: ["xls", "xlsx"],
-        uploadUrl: prefix+'/batchAdd'
-    });
 }
 /*用户管理-部门*/
 function dept() {

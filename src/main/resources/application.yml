@@ -8,7 +8,7 @@ system:
 
 #开发环境配置
 server:
-  port: 8080 # Server HTTP port.
+  port: 80 # Server HTTP port.
   #context-path: /SpringBootFramework # Context path of the application.
   # session最大超时时间(分钟)，默认为30
   session-timeout: 30
