@@ -1,11 +1,16 @@
 package com.watchdata.framework.web.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.watchdata.common.utils.StringUtils;
 import com.watchdata.common.utils.security.ShiroUtils;
+import com.watchdata.framework.web.domain.AjaxResult;
 import com.watchdata.framework.web.page.PageDomain;
 import com.watchdata.framework.web.page.TableDataInfo;
 import com.watchdata.framework.web.page.TableSupport;
@@ -18,6 +23,17 @@ import com.watchdata.project.system.user.domain.User;
  */
 public class BaseController
 {
+    /**
+     * 将前台传递过来的日期格式的字符串，自动转化为Date类型
+     */
+    @InitBinder
+    public void initBinder(WebDataBinder binder)
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+    }
+
     /**
      * 设置请求分页数据
      */
@@ -43,6 +59,54 @@ public class BaseController
         rspData.setRows(list);
         rspData.setTotal(new PageInfo(list).getTotal());
         return rspData;
+    }
+
+    /**
+     * 返回成功
+     */
+    public AjaxResult success()
+    {
+        return AjaxResult.success();
+    }
+
+    /**
+     * 返回失败消息
+     */
+    public AjaxResult error()
+    {
+        return AjaxResult.error();
+    }
+
+    /**
+     * 返回成功消息
+     */
+    public AjaxResult success(String message)
+    {
+        return AjaxResult.success(message);
+    }
+
+    /**
+     * 返回失败消息
+     */
+    public AjaxResult error(String message)
+    {
+        return AjaxResult.error(message);
+    }
+
+    /**
+     * 返回错误码消息
+     */
+    public AjaxResult error(int code, String message)
+    {
+        return AjaxResult.error(code, message);
+    }
+
+    /**
+     * 页面跳转
+     */
+    public String redirect(String url)
+    {
+        return StringUtils.format("redirect:{}", url);
     }
 
     public User getUser()

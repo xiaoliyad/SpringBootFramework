@@ -15,6 +15,7 @@
     <link th:href="@{/css/font-awesome.css}" rel="stylesheet"/>
     <link th:href="@{/css/animate.css}" rel="stylesheet"/>
     <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <link th:href="@{/platform/css/ry-ui.min.css?v=2.0.0}" rel="stylesheet"/>
     <style type="text/css">
         .nav > li:hover .dropdown-menu {display: block;}
     </style>
@@ -23,6 +24,9 @@
 <div id="wrapper">
     <!--左侧导航开始-->
     <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="nav-close">
+            <i class="fa fa-times-circle"></i>
+        </div>
         <div class="sidebar-collapse">
             <ul class="nav" id="side-menu">
              	<li class="nav-header">
@@ -64,7 +68,8 @@
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
                     <li class="hidden-xs"><span class="block m-t-xs"><strong class="font-bold"><a class="menuItem" th:href="@{/system/user/profile}">[[${user.userName}]]</a></strong></span></li>
-                    <li class="hidden-xs"><a th:href="@{logout}"><i class="fa fa-sign-out"></i>退出</a></li>
+	                <li><a id="fullScreen"><i class="fa fa-arrows-alt"></i>全屏</a></li>
+                    <li><a th:href="@{logout}"><i class="fa fa-sign-out"></i>退出</a></li>
                 </ul>
             </nav>
         </div>
@@ -107,6 +112,9 @@
 <script th:src="@{/js/bootstrap.min.js}"></script>
 <script th:src="@{/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
 <script th:src="@{/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
+<script th:src="@{/platform/js/ry-ui.min.js?v=2.0.0}"></script>
 <script th:src="@{/platform/index.js}"></script>
+<script th:src="@{/ajax/libs/fullscreen/jquery.fullscreen.js}"></script>
 </body>
 </html>

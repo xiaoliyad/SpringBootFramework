@@ -187,6 +187,7 @@ $(function() {
     });
 
     function menuItem() {
+    	$.modal.loading("数据加载中，请稍后...");
         // 获取标识数据
         var dataUrl = $(this).attr('href'),
         dataIndex = $(this).data('index'),
@@ -225,6 +226,7 @@ $(function() {
             $('.menuTabs .page-tabs-content').append(str);
             scrollToTab($('.menuTab.active'));
         }
+        $.modal.closeLoading();
         return false;
     }
 
@@ -355,6 +357,11 @@ $(function() {
         var url = target.attr('src');
         target.attr('src', url).ready();
     }
+    
+    // 全屏显示
+    $('#fullScreen').on('click', function () {
+    	$('#wrapper').fullScreen();
+    });
     
     // 刷新按钮
     $('.tabReload').on('click', refreshTab);

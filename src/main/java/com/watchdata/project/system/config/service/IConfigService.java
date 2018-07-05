@@ -70,10 +70,10 @@ public interface IConfigService
     /**
      * 批量删除参数配置信息
      * 
-     * @param configIds 需要删除的数据ID
+     * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int batchDeleteConfig(Integer[] configIds);
+    public int deleteConfigByIds(String ids);
 
     /**
      * 校验参数键名是否唯一

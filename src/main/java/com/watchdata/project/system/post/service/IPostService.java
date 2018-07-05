@@ -48,15 +48,14 @@ public interface IPostService
      * @param postId 岗位ID
      * @return 结果
      */
-    public int deletePostById(Long postId);
+    public boolean deletePostById(Long postId);
 
     /**
      * 批量删除岗位信息
      * 
      * @param ids 需要删除的数据ID
-     * @return 结果
      */
-    public int batchDeletePost(Long[] ids);
+    public void deletePostByIds(String ids) throws Exception;
 
     /**
      * 保存岗位信息
@@ -72,5 +71,5 @@ public interface IPostService
      * @param postId 岗位ID
      * @return 结果
      */
-    public int selectCountPostById(Long postId);
+    public int countUserPostById(Long postId);
 }

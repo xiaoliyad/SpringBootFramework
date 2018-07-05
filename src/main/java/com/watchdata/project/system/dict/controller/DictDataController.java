@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.watchdata.framework.aspectj.lang.annotation.Log;
+import com.watchdata.framework.aspectj.lang.constant.BusinessType;
 import com.watchdata.framework.web.controller.BaseController;
-import com.watchdata.framework.web.domain.Message;
+import com.watchdata.framework.web.domain.AjaxResult;
 import com.watchdata.framework.web.page.TableDataInfo;
 import com.watchdata.project.system.dict.domain.DictData;
 import com.watchdata.project.system.dict.service.IDictDataService;
@@ -53,7 +53,7 @@ public class DictDataController extends BaseController
     /**
      * 修改字典类型
      */
-    @Log(title = "系统管理", action = "字典管理-修改字典数据")
+    @Log(title = "字典数据", action = BusinessType.UPDATE)
     @RequiresPermissions("system:dict:edit")
     @GetMapping("/edit/{dictCode}")
     public String edit(@PathVariable("dictCode") Long dictCode, Model model)
@@ -66,7 +66,7 @@ public class DictDataController extends BaseController
     /**
      * 新增字典类型
      */
-    @Log(title = "系统管理", action = "字典管理-新增字典数据")
+    @Log(title = "字典数据", action = BusinessType.INSERT)
     @RequiresPermissions("system:dict:add")
     @GetMapping("/add/{dictType}")
     public String add(@PathVariable("dictType") String dictType, Model model)
@@ -78,51 +78,30 @@ public class DictDataController extends BaseController
     /**
      * 保存字典类型
      */
-    @Log(title = "系统管理", action = "字典管理-保存字典数据")
+    @Log(title = "字典数据", action = BusinessType.SAVE)
     @RequiresPermissions("system:dict:save")
     @PostMapping("/save")
     @ResponseBody
-    public Message save(DictData dict)
+    public AjaxResult save(DictData dict)
     {
         if (dictDataService.saveDictData(dict) > 0)
         {
-            return Message.success();
+            return success();
         }
-        return Message.error();
-    }
-    
-    /**
-     * 删除
-     */
-    @Log(title = "系统管理", action = "字典管理-删除字典数据")
-    @RequiresPermissions("system:dict:remove")
-    @RequestMapping("/remove/{dictCode}")
-    @ResponseBody
-    public Message remove(@PathVariable("dictCode") Long dictCode)
-    {
-        DictData dictData = dictDataService.selectDictDataById(dictCode);
-        if (dictData == null)
-        {
-            return Message.error("字典数据不存在");
-        }
-        if (dictDataService.deleteDictDataById(dictCode) > 0)
-        {
-            return Message.success();
-        }
-        return Message.error();
+        return error();
     }
 
-    @Log(title = "系统管理", action = "字典类型-批量删除")
-    @RequiresPermissions("system:dict:batchRemove")
-    @PostMapping("/batchRemove")
+    @Log(title = "字典数据", action = BusinessType.DELETE)
+    @RequiresPermissions("system:dict:remove")
+    @PostMapping("/remove")
     @ResponseBody
-    public Message batchRemove(@RequestParam("ids[]") Long[] ids)
+    public AjaxResult remove(String ids)
     {
-        int rows = dictDataService.batchDeleteDictData(ids);
+        int rows = dictDataService.deleteDictDataByIds(ids);
         if (rows > 0)
         {
-            return Message.success();
+            return success();
         }
-        return Message.error();
+        return error();
     }
 }

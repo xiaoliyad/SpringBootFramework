@@ -10,14 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.watchdata.common.utils.FileUploadUtils;
 import com.watchdata.framework.aspectj.lang.annotation.Log;
+import com.watchdata.framework.aspectj.lang.constant.BusinessType;
 import com.watchdata.framework.web.controller.BaseController;
-import com.watchdata.framework.web.domain.Message;
+import com.watchdata.framework.web.domain.AjaxResult;
 import com.watchdata.project.system.user.domain.User;
 import com.watchdata.project.system.user.service.IUserService;
 
@@ -74,7 +71,6 @@ public class ProfileController extends BaseController
         return false;
     }
 
-    @Log(title = "系统管理", action = "个人信息-重置密码")
     @GetMapping("/resetPwd/{userId}")
     public String resetPwd(@PathVariable("userId") Long userId, Model model)
     {
@@ -83,24 +79,24 @@ public class ProfileController extends BaseController
         return prefix + "/resetPwd";
     }
 
-    @Log(title = "系统管理", action = "个人信息-重置密码")
+    @Log(title = "重置密码", action = BusinessType.UPDATE)
     @PostMapping("/resetPwd")
     @ResponseBody
-    public Message resetPwd(User user)
+    public AjaxResult resetPwd(User user)
     {
         int rows = userService.resetUserPwd(user);
         if (rows > 0)
         {
             setUser(userService.selectUserById(user.getUserId()));
-            return Message.success();
+            return success();
         }
-        return Message.error();
+        return error();
     }
 
     /**
      * 修改用户
      */
-    @Log(title = "系统管理", action = "个人信息-修改用户")
+    @Log(title = "个人信息", action = BusinessType.UPDATE)
     @GetMapping("/edit/{userId}")
     public String edit(@PathVariable("userId") Long userId, Model model)
     {
@@ -112,7 +108,7 @@ public class ProfileController extends BaseController
     /**
      * 修改头像
      */
-    @Log(title = "系统管理", action = "个人信息-修改头像")
+    @Log(title = "个人信息", action = BusinessType.UPDATE)
     @GetMapping("/avatar/{userId}")
     public String avatar(@PathVariable("userId") Long userId, Model model)
     {
@@ -124,45 +120,45 @@ public class ProfileController extends BaseController
     /**
      * 修改用户
      */
-    @Log(title = "系统管理", action = "个人信息-保存用户")
+    @Log(title = "个人信息", action = BusinessType.SAVE)
     @PostMapping("/update")
     @ResponseBody
-    public Message update(User user)
+    public AjaxResult update(User user)
     {
         if (userService.updateUser(user) > 0)
         {
             setUser(userService.selectUserById(user.getUserId()));
-            return Message.success();
+            return success();
         }
-        return Message.error();
+        return error();
     }
 
-    /**
-     * 保存头像
-     */
-    @Log(title = "系统管理", action = "个人信息-保存头像")
-    @PostMapping("/updateAvatar")
-    @ResponseBody
-    public Message updateAvatar(User user, @RequestParam("avatarfile") MultipartFile file)
-    {
-        try
-        {
-            if (!file.isEmpty())
-            {
-                String avatar = FileUploadUtils.upload(file);
-                user.setAvatar(avatar);
-                if (userService.updateUser(user) > 0)
-                {
-                    setUser(userService.selectUserById(user.getUserId()));
-                    return Message.success();
-                }
-            }
-            return Message.error();
-        }
-        catch (Exception e)
-        {
-            log.error("updateAvatar failed!", e);
-            return Message.error(e.getMessage());
-        }
-    }
+//    /**
+//     * 保存头像
+//     */
+//    @Log(title = "个人信息", action = BusinessType.SAVE)
+//    @PostMapping("/updateAvatar")
+//    @ResponseBody
+//    public AjaxResult updateAvatar(User user, @RequestParam("avatarfile") MultipartFile file)
+//    {
+//        try
+//        {
+//            if (!file.isEmpty())
+//            {
+////                String avatar = FileUploadUtils.upload(file);
+//                user.setAvatar(avatar);
+//                if (userService.updateUser(user) > 0)
+//                {
+//                    setUser(userService.selectUserById(user.getUserId()));
+//                    return success();
+//                }
+//            }
+//            return error();
+//        }
+//        catch (Exception e)
+//        {
+//            log.error("updateAvatar failed!", e);
+//            return error(e.getMessage());
+//        }
+//    }
 }

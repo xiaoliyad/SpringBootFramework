@@ -6,6 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.watchdata.framework.aspectj.lang.constant.OperatorType;
+
 /**
  * 自定义操作日志记录注解
  * 
@@ -24,7 +26,7 @@ public @interface Log
     String action() default "";
 
     /** 渠道 */
-    String channel() default "web";
+    String channel() default OperatorType.MANAGE;
 
     /** 是否保存请求的参数 */
     boolean isSaveRequestData() default true;

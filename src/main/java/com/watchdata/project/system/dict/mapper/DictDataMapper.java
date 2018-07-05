@@ -50,7 +50,7 @@ public interface DictDataMapper
      * @param ids 需要删除的数据
      * @return 结果
      */
-    public int batchDeleteDictData(Long[] ids);
+    public int deleteDictDataByIds(Long[] ids);
 
     /**
      * 新增字典数据信息

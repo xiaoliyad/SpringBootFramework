@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.watchdata.common.constant.ScheduleConstants;
+import com.watchdata.common.support.Convert;
 import com.watchdata.common.utils.StringUtils;
 import com.watchdata.common.utils.security.ShiroUtils;
 import com.watchdata.project.monitor.job.domain.Job;
@@ -135,9 +136,10 @@ public class JobServiceImpl implements IJobService
      * @return 结果
      */
     @Override
-    public void batchDeleteJob(Long[] ids)
+    public void deleteJobByIds(String ids)
     {
-        for (Long jobId : ids)
+        Long[] jobIds = Convert.toLongArray(ids);
+        for (Long jobId : jobIds)
         {
             Job job = jobMapper.selectJobById(jobId);
             deleteJob(job);
@@ -154,11 +156,11 @@ public class JobServiceImpl implements IJobService
     {
         int rows = 0;
         int status = job.getStatus();
-        if (status == 0)
+        if (ScheduleConstants.Status.NORMAL.getValue()==status)
         {
             rows = resumeJob(job);
         }
-        else if (status == 1)
+        else if (ScheduleConstants.Status.PAUSE.getValue()==status)
         {
             rows = pauseJob(job);
         }

@@ -3,138 +3,26 @@
  * Copyright (c) 2018 ruoyi 
  */
 
-/** 消息状态码 */
-web_status = {
-    SUCCESS: 0,
-    FAIL: 500
-};
-
-/** 弹窗状态码 */
-modal_status = {
-    SUCCESS: "success",
-    FAIL: "error",
-    WARNING: "warning"
-};
-
-/** 弹出层指定宽度 */
-function layer_show(title, url, w, h) {
-    if (title == null || title == '') {
-        title = false;
-    };
-    if (url == null || url == '') {
-        url = "404.html";
-    };
-    if (w == null || w == '') {
-        w = 800;
-    };
-    if (h == null || h == '') {
-        h = ($(window).height() - 50);
-    };
-    layer.open({
-        type: 2,
-        area: [w + 'px', h + 'px'],
-        fix: false,
-        //不固定
-        maxmin: true,
-        shade: 0.4,
-        title: title,
-        content: url
-    });
-}
-
-/** 弹出层自动宽高 */
-function layer_showAuto(title, url) {
-	layer_show(title, url, '', '');
-}
-
-/** 关闭弹出框口 */
-function layer_close() {
-    var index = parent.layer.getFrameIndex(window.name);
-    parent.layer.close(index);
-}
-
-/** 对ajax的post方法再次封装 */
-_ajax_save = function(url, data) {
-    var config = {
-        url: url,
-        type: "post",
-        dataType: "json",
-        data: data,
-        success: function(result) {
-        	handleSuccess(result);
-        }
-    };
-    $.ajax(config)
-};
-
-/** 对jquery的ajax方法再次封装 */
-_ajax = function(url, data, type) {
-    var config = {
-        url: url,
-        type: type,
-        dataType: "json",
-        data: data,
-        success: function(result) {
-            simpleSuccess(result);
-        }
-    };
-    $.ajax(config)
-};
-
-/** 返回结果处理 */
-function simpleSuccess(result) {
-    if (result.code == web_status.SUCCESS) {
-		$.modalMsg(result.msg, modal_status.SUCCESS);
-		$.refreshTable();
-    } else {
-    	$.modalAlert(result.msg, modal_status.FAIL);
-    }
-}
-
-/** 操作结果处理 */
-function handleSuccess(result) {
-    if (result.code == web_status.SUCCESS) {
-    	parent.layer.msg("操作成功,正在刷新数据请稍后……",{icon:1,time: 500,shade: [0.1,'#fff']},function(){
-			$.parentReload();
-		});
-    } else {
-    	$.modalAlert(result.msg, modal_status.FAIL);
-    }
-}
-
-/** 时间格式化 */
-function formatDate(_date, _pattern) {
-	var date = new Date(_date);
-	var newDate = date.format(_pattern);
-	return newDate;
-}
-
-Date.prototype.format = function(format) {
-	var date = {
-		"M+" : this.getMonth() + 1,
-		"d+" : this.getDate(),
-		"h+" : this.getHours(),
-		"m+" : this.getMinutes(),
-		"s+" : this.getSeconds(),
-		"q+" : Math.floor((this.getMonth() + 3) / 3),
-		"S+" : this.getMilliseconds()
-	};
-	if (/(y+)/i.test(format)) {
-		format = format.replace(RegExp.$1, (this.getFullYear() + '')
-				.substr(4 - RegExp.$1.length));
+$(function(){
+	// 复选框事件绑定
+	if ($.fn.select2 !== undefined) {
+		$("select.form-control:not(.noselect2)").each(function () {
+			$(this).select2().on("change", function () {
+				$(this).valid();
+			})
+		})
 	}
-	for ( var k in date) {
-		if (new RegExp("(" + k + ")").test(format)) {
-			format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? date[k]
-					: ("00" + date[k]).substr(("" + date[k]).length));
-		}
+	if ($(".i-checks").length > 0) {
+	    $(".i-checks").iCheck({
+	        checkboxClass: "icheckbox_square-green",
+	        radioClass: "iradio_square-green",
+	    })
 	}
-	return format;
-}
+});
 
 /** 创建选项卡 */
 function createMenuItem(dataUrl, menuName) {
-    dataIndex = Math.floor(Math.random()*100),
+    dataIndex = $.common.random(1,100),
     flag = true;
     if (dataUrl == undefined || $.trim(dataUrl).length == 0) return false;
     var topWindow = $(window.parent.document);
@@ -175,7 +63,7 @@ function createMenuItem(dataUrl, menuName) {
 $.ajaxSetup({
     complete: function(XMLHttpRequest, textStatus) {
         if (textStatus == "parsererror") {
-        	$.modalConfirm("登陆超时！请重新登陆！", function() {
+        	$.modal.confirm("登陆超时！请重新登陆！", function() {
         		window.location.href = ctx + "login";
         	})
         }

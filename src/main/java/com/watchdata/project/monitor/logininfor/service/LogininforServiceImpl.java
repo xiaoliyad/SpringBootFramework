@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.watchdata.common.support.Convert;
 import com.watchdata.project.monitor.logininfor.domain.Logininfor;
 import com.watchdata.project.monitor.logininfor.mapper.LogininforMapper;
 
@@ -50,8 +50,8 @@ public class LogininforServiceImpl implements ILogininforService
      * @return
      */
     @Override
-    public int batchDeleteLogininfor(Long[] ids)
+    public int deleteLogininforByIds(String ids)
     {
-        return logininforMapper.batchDeleteLogininfor(ids);
+        return logininforMapper.deleteLogininforByIds(Convert.toLongArray(ids));
     }
 }

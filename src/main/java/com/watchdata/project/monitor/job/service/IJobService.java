@@ -58,7 +58,7 @@ public interface IJobService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public void batchDeleteJob(Long[] ids);
+    public void deleteJobByIds(String ids);
 
     /**
      * 任务调度状态修改

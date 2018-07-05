@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.watchdata.common.support.Convert;
 import com.watchdata.project.monitor.job.domain.JobLog;
 import com.watchdata.project.monitor.job.mapper.JobLogMapper;
 
@@ -62,9 +62,9 @@ public class JobLogServiceImpl implements IJobLogService
      * @return 结果
      */
     @Override
-    public int batchDeleteJoblog(Long[] ids)
+    public int deleteJobLogByIds(String ids)
     {
-        return jobLogMapper.batchDeleteJobLog(ids);
+        return jobLogMapper.deleteJobLogByIds(Convert.toLongArray(ids));
     }
 
     /**

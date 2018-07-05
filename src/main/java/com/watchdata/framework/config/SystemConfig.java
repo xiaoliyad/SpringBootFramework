@@ -56,7 +56,7 @@ public class SystemConfig
         return profile;
     }
 
-    public static void setProfile(String profile)
+    public void setProfile(String profile)
     {
         SystemConfig.profile = profile;
     }

@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.watchdata.framework.aspectj.lang.annotation.Log;
+import com.watchdata.framework.aspectj.lang.constant.BusinessType;
 import com.watchdata.framework.web.controller.BaseController;
-import com.watchdata.framework.web.domain.Message;
+import com.watchdata.framework.web.domain.AjaxResult;
 import com.watchdata.project.system.menu.domain.Menu;
 import com.watchdata.project.system.menu.service.IMenuService;
 import com.watchdata.project.system.role.domain.Role;
@@ -54,31 +55,31 @@ public class MenuController extends BaseController
     /**
      * 删除菜单
      */
-    @Log(title = "系统管理", action = "菜单管理-删除菜单")
+    @Log(title = "菜单管理", action = BusinessType.DELETE)
     @RequiresPermissions("system:menu:remove")
-    @GetMapping("/remove/{menuId}")
+    @PostMapping("/remove/{menuId}")
     @ResponseBody
-    public Message remove(@PathVariable("menuId") Long menuId)
+    public AjaxResult remove(@PathVariable("menuId") Long menuId)
     {
         if (menuService.selectCountMenuByParentId(menuId) > 0)
         {
-            return Message.error(1, "存在子菜单,不允许删除");
+            return error(1, "存在子菜单,不允许删除");
         }
         if (menuService.selectCountRoleMenuByMenuId(menuId) > 0)
         {
-            return Message.error(1, "菜单已分配,不允许删除");
+            return error(1, "菜单已分配,不允许删除");
         }
         if (menuService.deleteMenuById(menuId) > 0)
         {
-            return Message.success();
+            return success();
         }
-        return Message.error();
+        return error();
     }
 
     /**
      * 修改菜单
      */
-    @Log(title = "系统管理", action = "菜单管理-修改菜单")
+    @Log(title = "菜单管理", action = BusinessType.UPDATE)
     @RequiresPermissions("system:menu:edit")
     @GetMapping("/edit/{menuId}")
     public String edit(@PathVariable("menuId") Long menuId, Model model)
@@ -87,11 +88,11 @@ public class MenuController extends BaseController
         model.addAttribute("menu", menu);
         return prefix + "/edit";
     }
-    
+
     /**
      * 新增
      */
-    @Log(title = "系统管理", action = "菜单管理-新增菜单")
+    @Log(title = "菜单管理", action = BusinessType.INSERT)
     @RequiresPermissions("system:menu:add")
     @GetMapping("/add/{parentId}")
     public String add(@PathVariable("parentId") Long parentId, Model model)
@@ -114,17 +115,17 @@ public class MenuController extends BaseController
     /**
      * 保存菜单
      */
-    @Log(title = "系统管理", action = "菜单管理-保存菜单")
+    @Log(title = "菜单管理", action = BusinessType.SAVE)
     @RequiresPermissions("system:menu:save")
     @PostMapping("/save")
     @ResponseBody
-    public Message save(Menu menu)
+    public AjaxResult save(Menu menu)
     {
         if (menuService.saveMenu(menu) > 0)
         {
-            return Message.success();
+            return success();
         }
-        return Message.error();
+        return error();
     }
 
     /**

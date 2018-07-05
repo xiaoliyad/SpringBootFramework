@@ -18,7 +18,9 @@
         showExport: false,
         exportDataType: 'all', // basic, all, selected
         exportTypes: ['csv', 'txt', 'doc', 'excel'],
-        exportOptions: {}
+        exportOptions: {
+        	ignoreColumn: [0]  //忽略列索引
+        }
     });
 
     $.extend($.fn.bootstrapTable.defaults.icons, {
@@ -98,12 +100,15 @@
                         });
                         that.togglePagination();
                     } else if (that.options.exportDataType === 'selected') {
-                        var data = that.getData(),
-                            selectedData = that.getAllSelections();
-
-                        that.load(selectedData);
-                        doExport();
-                        that.load(data);
+                        //修改sidePagination属性为server无法导出选中数据
+                    	var trs = that.$body.children(); 
+                    	for (var i = 0; i < trs.length; i++) {
+                    	    var $this = $(trs[i]);
+                    	    if(!$this.find(sprintf('[name="%s"]',that.options.selectItemName)).prop('checked')){
+                    	      $this['hide']();
+                    	 }}
+                    	doExport();
+                    	that.getRowsHidden(true);
                     } else {
                         doExport();
                     }

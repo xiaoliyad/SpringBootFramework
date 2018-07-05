@@ -42,7 +42,7 @@ public interface IDictTypeService
      * @param ids 需要删除的数据
      * @return 结果
      */
-    public int batchDeleteDictType(Long[] ids);
+    public int deleteDictTypeByIds(String ids);
 
     /**
      * 保存字典类型信息

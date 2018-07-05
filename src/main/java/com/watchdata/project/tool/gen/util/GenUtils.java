@@ -28,9 +28,6 @@ public class GenUtils
     /** html空间路径 */
     private static final String templatesPath = "main/resources/templates";
 
-    /** js空间路径 */
-    private static final String javascriptPath = "main/resources/static/platform";
-
     /**
      * 设置列信息
      */
@@ -94,9 +91,6 @@ public class GenUtils
         templates.add("templates/vm/html/list.html.vm");
         templates.add("templates/vm/html/add.html.vm");
         templates.add("templates/vm/html/edit.html.vm");
-        templates.add("templates/vm/js/list.js.vm");
-        templates.add("templates/vm/js/add.js.vm");
-        templates.add("templates/vm/js/edit.js.vm");
         templates.add("templates/vm/sql/sql.vm");
         return templates;
     }
@@ -129,7 +123,6 @@ public class GenUtils
         String javaPath = projectPath + "/" + moduleName + "/";
         String mybatisPath = myBatisPath + "/" + moduleName + "/" + className;
         String htmlPath = templatesPath + "/" + moduleName + "/" + classname;
-        String jsPath = javascriptPath + "/" + moduleName + "/" + classname;
 
         if (StringUtils.isNotEmpty(classname))
         {
@@ -177,19 +170,6 @@ public class GenUtils
         if (template.contains("edit.html.vm"))
         {
             return htmlPath + "/" + "edit.html";
-        }
-
-        if (template.contains("list.js.vm"))
-        {
-            return jsPath + "/" + classname + ".js";
-        }
-        if (template.contains("add.js.vm"))
-        {
-            return jsPath + "/" + "add.js";
-        }
-        if (template.contains("edit.js.vm"))
-        {
-            return jsPath + "/" + "edit.js";
         }
         if (template.contains("sql.vm"))
         {

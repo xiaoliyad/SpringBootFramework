@@ -41,7 +41,7 @@ public interface IJobLogService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int batchDeleteJoblog(Long[] ids);
+    public int deleteJobLogByIds(String ids);
 
     /**
      * 删除任务日志

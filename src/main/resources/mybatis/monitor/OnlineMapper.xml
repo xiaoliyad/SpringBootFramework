@@ -44,8 +44,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	<select id="selectUserOnlineList" parameterType="UserOnline" resultMap="UserOnlineResult">
 		select * from sys_user_online
 		<where>
-			<if test="searchValue != null and searchValue != ''">
-				AND login_name like concat('%', #{searchValue}, '%')
+			<if test="ipaddr != null and ipaddr != ''">
+				AND ipaddr like concat('%', #{ipaddr}, '%')
+			</if>
+			<if test="loginName != null and loginName != ''">
+				AND login_name like concat('%', #{loginName}, '%')
 			</if>
 		</where>
 	</select>

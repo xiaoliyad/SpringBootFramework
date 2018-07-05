@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.watchdata.framework.aspectj.lang.annotation.Log;
+import com.watchdata.framework.aspectj.lang.constant.BusinessType;
 import com.watchdata.framework.web.controller.BaseController;
-import com.watchdata.framework.web.domain.Message;
+import com.watchdata.framework.web.domain.AjaxResult;
 import com.watchdata.framework.web.page.TableDataInfo;
 import com.watchdata.project.monitor.job.domain.Job;
 import com.watchdata.project.monitor.job.service.IJobService;
@@ -50,65 +50,44 @@ public class JobController extends BaseController
         return getDataTable(list);
     }
 
-    /**
-     * 删除
-     */
-    @Log(title = "监控管理", action = "定时任务-删除调度")
+    @Log(title = "定时任务", action = BusinessType.DELETE)
     @RequiresPermissions("monitor:job:remove")
-    @RequestMapping("/remove/{jobId}")
+    @PostMapping("/remove")
     @ResponseBody
-    public Message remove(@PathVariable("jobId") Long jobId)
-    {
-        Job job = jobService.selectJobById(jobId);
-        if (job == null)
-        {
-            return Message.error("调度任务不存在");
-        }
-        if (jobService.deleteJob(job) > 0)
-        {
-            return Message.success();
-        }
-        return Message.error();
-    }
-
-    @Log(title = "监控管理", action = "定时任务-批量删除")
-    @RequiresPermissions("monitor:job:batchRemove")
-    @PostMapping("/batchRemove")
-    @ResponseBody
-    public Message batchRemove(@RequestParam("ids[]") Long[] ids)
+    public AjaxResult remove(String ids)
     {
         try
         {
-            jobService.batchDeleteJob(ids);
-            return Message.success();
+            jobService.deleteJobByIds(ids);
+            return success();
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return Message.error(e.getMessage());
+            return error(e.getMessage());
         }
     }
 
     /**
      * 任务调度状态修改
      */
-    @Log(title = "监控管理", action = "定时任务-状态修改")
+    @Log(title = "定时任务", action = BusinessType.UPDATE)
     @RequiresPermissions("monitor:job:changeStatus")
     @PostMapping("/changeStatus")
     @ResponseBody
-    public Message changeStatus(Job job)
+    public AjaxResult changeStatus(Job job)
     {
         if (jobService.changeStatus(job) > 0)
         {
-            return Message.success();
+            return success();
         }
-        return Message.error();
+        return error();
     }
 
     /**
      * 新增调度
      */
-    @Log(title = "监控管理", action = "定时任务-新增调度")
+    @Log(title = "定时任务", action = BusinessType.INSERT)
     @RequiresPermissions("monitor:job:add")
     @GetMapping("/add")
     public String add(Model model)
@@ -119,7 +98,7 @@ public class JobController extends BaseController
     /**
      * 修改调度
      */
-    @Log(title = "监控管理", action = "定时任务-修改调度")
+    @Log(title = "定时任务", action = BusinessType.UPDATE)
     @RequiresPermissions("monitor:job:edit")
     @GetMapping("/edit/{jobId}")
     public String edit(@PathVariable("jobId") Long jobId, Model model)
@@ -132,16 +111,16 @@ public class JobController extends BaseController
     /**
      * 保存调度
      */
-    @Log(title = "监控管理", action = "定时任务-保存调度")
+    @Log(title = "定时任务", action = BusinessType.SAVE)
     @RequiresPermissions("monitor:job:save")
     @PostMapping("/save")
     @ResponseBody
-    public Message save(Job job)
+    public AjaxResult save(Job job)
     {
         if (jobService.saveJobCron(job) > 0)
         {
-            return Message.success();
+            return success();
         }
-        return Message.error();
+        return error();
     }
 }

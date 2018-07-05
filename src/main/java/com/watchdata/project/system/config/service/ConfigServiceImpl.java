@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.watchdata.common.constant.UserConstants;
+import com.watchdata.common.support.Convert;
 import com.watchdata.common.utils.StringUtils;
 import com.watchdata.project.system.config.domain.Config;
 import com.watchdata.project.system.config.mapper.ConfigMapper;
@@ -123,9 +124,9 @@ public class ConfigServiceImpl implements IConfigService
      * @return 结果
      */
     @Override
-    public int batchDeleteConfig(Integer[] configIds)
+    public int deleteConfigByIds(String ids)
     {
-        return configMapper.batchDeleteConfig(configIds);
+        return configMapper.deleteConfigByIds(Convert.toIntArray(ids));
     }
 
     /**

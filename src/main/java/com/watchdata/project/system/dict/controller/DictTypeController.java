@@ -1,7 +1,6 @@
 package com.watchdata.project.system.dict.controller;
 
 import java.util.List;
-
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,12 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.watchdata.framework.aspectj.lang.annotation.Log;
+import com.watchdata.framework.aspectj.lang.constant.BusinessType;
 import com.watchdata.framework.web.controller.BaseController;
-import com.watchdata.framework.web.domain.Message;
+import com.watchdata.framework.web.domain.AjaxResult;
 import com.watchdata.framework.web.page.TableDataInfo;
 import com.watchdata.project.system.dict.domain.DictType;
 import com.watchdata.project.system.dict.service.IDictTypeService;
@@ -54,7 +53,7 @@ public class DictTypeController extends BaseController
     /**
      * 修改字典类型
      */
-    @Log(title = "系统管理", action = "字典管理-修改字典类型")
+    @Log(title = "字典类型", action = BusinessType.UPDATE)
     @RequiresPermissions("system:dict:edit")
     @GetMapping("/edit/{dictId}")
     public String edit(@PathVariable("dictId") Long dictId, Model model)
@@ -67,7 +66,7 @@ public class DictTypeController extends BaseController
     /**
      * 新增字典类型
      */
-    @Log(title = "系统管理", action = "字典管理-新增字典类型")
+    @Log(title = "字典类型", action = BusinessType.INSERT)
     @RequiresPermissions("system:dict:add")
     @GetMapping("/add")
     public String add()
@@ -78,58 +77,36 @@ public class DictTypeController extends BaseController
     /**
      * 保存字典类型
      */
-    @Log(title = "系统管理", action = "字典管理-保存字典类型")
+    @Log(title = "字典类型", action = BusinessType.SAVE)
     @RequiresPermissions("system:dict:save")
     @PostMapping("/save")
     @ResponseBody
-    public Message save(DictType dict)
+    public AjaxResult save(DictType dict)
     {
         if (dictTypeService.saveDictType(dict) > 0)
         {
-            return Message.success();
+            return success();
         }
-        return Message.error();
-    }
-    
-    /**
-     * 删除
-     */
-    @Log(title = "系统管理", action = "字典管理-删除字典类型")
-    @RequiresPermissions("system:dict:remove")
-    @RequestMapping("/remove/{dictId}")
-    @ResponseBody
-    public Message remove(@PathVariable("dictId") Long dictId)
-    {
-        DictType dictType = dictTypeService.selectDictTypeById(dictId);
-        if (dictType == null)
-        {
-            return Message.error("字典不存在");
-        }
-        if (dictTypeService.deleteDictTypeById(dictId) > 0)
-        {
-            return Message.success();
-        }
-        return Message.error();
+        return error();
     }
 
-    @Log(title = "系统管理", action = "字典类型-批量删除")
-    @RequiresPermissions("system:dict:batchRemove")
-    @PostMapping("/batchRemove")
+    @Log(title = "字典类型", action = BusinessType.DELETE)
+    @RequiresPermissions("system:dict:remove")
+    @PostMapping("/remove")
     @ResponseBody
-    public Message batchRemove(@RequestParam("ids[]") Long[] ids)
+    public AjaxResult remove(String ids)
     {
-        int rows = dictTypeService.batchDeleteDictType(ids);
+        int rows = dictTypeService.deleteDictTypeByIds(ids);
         if (rows > 0)
         {
-            return Message.success();
+            return success();
         }
-        return Message.error();
+        return error();
     }
 
     /**
      * 查询字典详细
      */
-    @Log(title = "系统管理", action = "字典管理-查询字典数据")
     @RequiresPermissions("system:dict:list")
     @GetMapping("/detail/{dictId}")
     public String detail(@PathVariable("dictId") Long dictId, Model model)
@@ -138,7 +115,7 @@ public class DictTypeController extends BaseController
         model.addAttribute("dict", dict);
         return "system/dict/data/data";
     }
-    
+
     /**
      * 校验字典类型
      */

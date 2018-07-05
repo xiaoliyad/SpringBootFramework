@@ -58,15 +58,14 @@ public interface IRoleService
      * @param roleId 角色ID
      * @return 结果
      */
-    public int deleteRoleById(Long roleId);
+    public boolean deleteRoleById(Long roleId);
 
     /**
      * 批量删除角色用户信息
      * 
      * @param ids 需要删除的数据ID
-     * @return 结果
      */
-    public int batchDeleteRole(Long[] ids);
+    public void deleteRoleByIds(String ids) throws Exception;
 
     /**
      * 保存角色信息
@@ -90,6 +89,6 @@ public interface IRoleService
      * @param roleId 角色ID
      * @return 结果
      */
-    public int selectCountUserRoleByRoleId(Long roleId);
+    public int countUserRoleByRoleId(Long roleId);
 
 }

@@ -2,9 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
-<link href="/ajax/libs/iCheck/custom.css" th:href="@{/ajax/libs/iCheck/custom.css}" rel="stylesheet"/>
-<link href="/ajax/libs/select/select2.css" th:href="@{/ajax/libs/select/select2.css}" rel="stylesheet"/>
-<link href="/system/css/default.css" th:href="@{/system/css/default.css}" rel="stylesheet"/>
+<link th:href="@{/ajax/libs/iCheck/custom.css}" rel="stylesheet"/>
 <body class="white-bg">
 	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
 		<form class="form-horizontal m" id="form-user-add">
@@ -86,17 +84,146 @@
 			<div class="form-group">
 				<div class="col-sm-8 col-sm-offset-3">
 					<button type="submit" class="btn btn-primary"><i class="fa fa-check"></i>&nbsp;提交</button>
-					<button th:onclick="'javascript:layer_close()'" class="btn btn-danger" type="button"><i class="fa fa-times"></i>&nbsp;关闭</button>
+					<button onclick="$.modal.close()" class="btn btn-danger" type="button"><i class="fa fa-times"></i>&nbsp;关闭</button>
 				</div>
-			</div>
+		</div>
 		</form>
 	</div>
 	<div th:include="include::footer"></div>
-	<script th:src="@{/platform/system/user/add.js}"></script>
 	<script th:src="@{/ajax/libs/iCheck/icheck.min.js}"></script>
 	<script th:src="@{/ajax/libs/select/select2.js}"></script>
 	<script>
-        $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green",})});
+        $("#form-user-add").validate({
+        	rules:{
+        		loginName:{
+        			required:true,
+        			minlength: 2,
+        			maxlength: 20,
+        			remote: {
+                        url: ctx + "system/user/checkLoginNameUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                        	name : function() {
+                                return $.trim($("#loginName").val());
+                            }
+                        },
+                        dataFilter: function(data, type) {
+                            if (data == "0") return true;
+                            else return false;
+                        }
+                    }
+        		},
+        		userName:{
+        			required:true,
+        		},
+        		deptName:{
+        			required:true,
+        		},
+        		password:{
+        			required:true,
+        			minlength: 5,
+        			maxlength: 20
+        		},
+        		email:{
+        			required:true,
+                    email:true,
+                    remote: {
+                        url: ctx + "system/user/checkEmailUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            name: function () {
+                                return $.trim($("#email").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                            if (data == "0") return true;
+                            else return false;
+                        }
+                    }
+        		},
+        		phonenumber:{
+        			required:true,
+        			isPhone:true,
+                    remote: {
+                        url: ctx + "system/user/checkPhoneUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            name: function () {
+                                return $.trim($("#phonenumber").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                            if (data == "0") return true;
+                            else return false;
+                        }
+                    }
+        		},
+        	},
+        	messages: {
+                "loginName": {
+                    remote: "用户已经存在"
+                },
+        		"email": {
+                    remote: "Email已经存在"
+                },
+        		"phonenumber":{
+                	remote: "手机号码已经存在"
+        		}
+            },
+        	submitHandler:function(form){
+        		add();
+        	}
+        });
+
+        function add() {
+        	var userId = $("input[name='userId']").val();
+        	var deptId = $("input[name='deptId']").val();
+        	var loginName = $("input[name='loginName']").val();
+        	var userName = $("input[name='userName']").val();
+        	var password = $("input[name='password']").val();
+        	var email = $("input[name='email']").val();
+        	var phonenumber = $("input[name='phonenumber']").val();
+        	var sex = $("#sex option:selected").val();
+        	var status = $("input[name='status']").is(':checked') == true ? 0 : 1;
+        	var roleIds = $.form.selectCheckeds("role");
+        	var postIds = $.form.selectSelects("post");
+        	$.ajax({
+        		cache : true,
+        		type : "POST",
+        		url : ctx + "system/user/save",
+        		data : {
+        			"userId": userId,
+        			"deptId": deptId,
+        			"loginName": loginName,
+        			"userName": userName,
+        			"password": password,
+        			"email": email,
+        			"phonenumber": phonenumber,
+        			"sex": sex,
+        			"status": status,
+        			"roleIds": roleIds,
+        			"postIds": postIds
+        		},
+        		async : false,
+        		error : function(request) {
+        			$.modal.alertError("系统错误");
+        		},
+        		success : function(data) {
+        			$.operate.saveSuccess(data);
+        		}
+        	});
+        }
+
+        /*用户管理-新增-选择部门树*/
+        function selectDeptTree() {
+        	var treeId = $("#treeId").val();
+        	var deptId = treeId == null || treeId == "" ? "100" : treeId;
+        	var url = ctx + "system/dept/selectDeptTree/" + deptId;
+        	$.modal.open("选择部门", url, '380', '380');
+        }
     </script>
 </body>
 </html>

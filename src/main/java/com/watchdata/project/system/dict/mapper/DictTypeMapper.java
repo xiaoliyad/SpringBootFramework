@@ -44,15 +44,7 @@ public interface DictTypeMapper
      * @param ids 需要删除的数据
      * @return 结果
      */
-    public int batchDeleteDictType(Long[] ids);
-
-    /**
-     * 批量删除字典数据
-     * 
-     * @param ids 需要删除的数据
-     * @return 结果
-     */
-    public int batchDeleteDictData(Long[] ids);
+    public int deleteDictTypeByIds(Long[] ids);
 
     /**
      * 新增字典类型信息

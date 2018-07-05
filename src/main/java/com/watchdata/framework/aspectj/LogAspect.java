@@ -18,11 +18,11 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSONObject;
-import com.watchdata.common.constant.UserConstants;
 import com.watchdata.common.utils.ServletUtils;
 import com.watchdata.common.utils.StringUtils;
 import com.watchdata.common.utils.security.ShiroUtils;
 import com.watchdata.framework.aspectj.lang.annotation.Log;
+import com.watchdata.framework.aspectj.lang.constant.BusinessStatus;
 import com.watchdata.project.monitor.operlog.domain.OperLog;
 import com.watchdata.project.monitor.operlog.service.IOperLogService;
 import com.watchdata.project.system.user.domain.User;
@@ -89,7 +89,7 @@ public class LogAspect
 
             // *========数据库日志=========*//
             OperLog operLog = new OperLog();
-            operLog.setStatus(UserConstants.NORMAL);
+            operLog.setStatus(BusinessStatus.SUCCESS);
             // 请求的地址
             String ip = ShiroUtils.getIp();
             operLog.setOperIp(ip);
@@ -99,13 +99,13 @@ public class LogAspect
             operLog.setOperUrl(ServletUtils.getRequest().getRequestURI());
             if (currentUser != null)
             {
-                operLog.setLoginName(currentUser.getLoginName());
+                operLog.setOperName(currentUser.getLoginName());
                 operLog.setDeptName(currentUser.getDept().getDeptName());
             }
 
             if (e != null)
             {
-                operLog.setStatus(UserConstants.EXCEPTION);
+                operLog.setStatus(BusinessStatus.FAIL);
                 operLog.setErrorMsg(StringUtils.substring(e.getMessage(), 0, 2000));
             }
             // 设置方法名称

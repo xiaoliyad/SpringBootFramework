@@ -16,7 +16,7 @@
         var _main_div = $("<div class='fixed-table-container'></div>");
         target.before(_main_div);
         _main_div.append(target);
-        target.addClass("table table-hover treegrid-table table-bordered");
+        target.addClass("table table-hover treegrid-table");
         if (options.striped) {
             target.addClass('table-striped');
         }

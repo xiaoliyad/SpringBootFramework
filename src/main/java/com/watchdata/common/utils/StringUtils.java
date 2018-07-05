@@ -2,7 +2,10 @@ package com.watchdata.common.utils;
 
 import java.util.Collection;
 import java.util.Map;
+
 import org.apache.commons.lang.text.StrBuilder;
+
+import com.watchdata.common.support.StrFormatter;
 
 /**
  * 字符串工具类
@@ -13,6 +16,9 @@ public class StringUtils
 {
     /** 空字符串 */
     private static final String NULLSTR = "";
+
+    /** 下划线 */
+    private static final char SEPARATOR = '_';
 
     /**
      * 获取参数不为空值
@@ -231,6 +237,31 @@ public class StringUtils
         return str.substring(start, end);
     }
 
+    /**
+     * 格式化文本, {} 表示占位符<br>
+     * 此方法只是简单将占位符 {} 按照顺序替换为参数<br>
+     * 如果想输出 {} 使用 \\转义 { 即可，如果想输出 {} 之前的 \ 使用双转义符 \\\\ 即可<br>
+     * 例：<br>
+     * 通常使用：format("this is {} for {}", "a", "b") -> this is a for b<br>
+     * 转义{}： format("this is \\{} for {}", "a", "b") -> this is \{} for a<br>
+     * 转义\： format("this is \\\\{} for {}", "a", "b") -> this is \a for b<br>
+     * 
+     * @param template 文本模板，被替换的部分用 {} 表示
+     * @param params 参数值
+     * @return 格式化后的文本
+     */
+    public static String format(String template, Object... params)
+    {
+        if (isEmpty(params) || isEmpty(template))
+        {
+            return template;
+        }
+        return StrFormatter.format(template, params);
+    }
+
+    /**
+     * 驼峰首字符小写
+     */
     public static String uncapitalize(String str)
     {
         int strLen;
@@ -239,6 +270,47 @@ public class StringUtils
             return str;
         }
         return new StrBuilder(strLen).append(Character.toLowerCase(str.charAt(0))).append(str.substring(1)).toString();
+    }
+
+    /**
+     * 下划线转驼峰命名
+     */
+    public static String toUnderScoreCase(String s)
+    {
+        if (s == null)
+        {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        boolean upperCase = false;
+        for (int i = 0; i < s.length(); i++)
+        {
+            char c = s.charAt(i);
+
+            boolean nextUpperCase = true;
+
+            if (i < (s.length() - 1))
+            {
+                nextUpperCase = Character.isUpperCase(s.charAt(i + 1));
+            }
+
+            if ((i > 0) && Character.isUpperCase(c))
+            {
+                if (!upperCase || !nextUpperCase)
+                {
+                    sb.append(SEPARATOR);
+                }
+                upperCase = true;
+            }
+            else
+            {
+                upperCase = false;
+            }
+
+            sb.append(Character.toLowerCase(c));
+        }
+
+        return sb.toString();
     }
 
     /**
@@ -300,7 +372,7 @@ public class StringUtils
     }
 
     /**
-     * 字符串数据处理
+     * 瀛楃涓叉暟鎹鐞�
      */
     public static String valueAsStr(Object value)
     {
@@ -319,7 +391,7 @@ public class StringUtils
     }
 
     /**
-     * 整型数据处理
+     * 鏁村瀷鏁版嵁澶勭悊
      */
     public static Integer valueAsInt(Object value)
     {

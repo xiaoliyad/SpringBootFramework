@@ -9,11 +9,8 @@ import com.watchdata.framework.web.domain.BaseEntity;
  */
 public class Dept extends BaseEntity
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	/** 部门ID */
+    private static final long serialVersionUID = 1L;
+    /** 部门ID */
     private Long deptId;
     /** 父部门ID */
     private Long parentId;

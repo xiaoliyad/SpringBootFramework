@@ -3,10 +3,11 @@ package ${package}.service;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.watchdata.common.utils.StringUtils;
+import com.ruoyi.common.utils.StringUtils;
 import ${package}.mapper.${className}Mapper;
 import ${package}.domain.${className};
 import ${package}.service.I${className}Service;
+import com.ruoyi.common.support.Convert;
 
 /**
  * ${tableComment} 服务层实现
@@ -19,14 +20,14 @@ public class ${className}ServiceImpl implements I${className}Service
 {
 	@Autowired
 	private ${className}Mapper ${classname}Mapper;
-	
+
 	/**
      * 查询${tableComment}信息
      * 
      * @param ${primaryKey.attrname} ${tableComment}ID
      * @return ${tableComment}信息
      */
-	 @Override
+    @Override
 	public ${className} select${className}ById(${primaryKey.attrType} ${primaryKey.attrname})
 	{
 	    return ${classname}Mapper.select${className}ById(${primaryKey.attrname});
@@ -38,7 +39,7 @@ public class ${className}ServiceImpl implements I${className}Service
      * @param ${classname} ${tableComment}信息
      * @return ${tableComment}集合
      */
-	 @Override
+	@Override
 	public List<${className}> select${className}List(${className} ${classname})
 	{
 	    return ${classname}Mapper.select${className}List(${classname});
@@ -50,7 +51,7 @@ public class ${className}ServiceImpl implements I${className}Service
      * @param ${classname} ${tableComment}信息
      * @return 结果
      */
-	 @Override
+	@Override
 	public int insert${className}(${className} ${classname})
 	{
 	    return ${classname}Mapper.insert${className}(${classname});
@@ -62,7 +63,7 @@ public class ${className}ServiceImpl implements I${className}Service
      * @param ${classname} ${tableComment}信息
      * @return 结果
      */
-	 @Override
+	@Override
 	public int update${className}(${className} ${classname})
 	{
 	    return ${classname}Mapper.update${className}(${classname});
@@ -74,7 +75,7 @@ public class ${className}ServiceImpl implements I${className}Service
      * @param ${classname} ${tableComment}信息
      * @return 结果
      */
-	 @Override
+	@Override
 	public int save${className}(${className} ${classname})
 	{
 	    ${primaryKey.attrType} ${primaryKey.attrname} = ${classname}.get${primaryKey.attrName}();
@@ -91,27 +92,15 @@ public class ${className}ServiceImpl implements I${className}Service
 	}
 	
 	/**
-     * 删除${tableComment}信息
+     * 删除${tableComment}对象
      * 
-     * @param ${primaryKey.attrname} ${tableComment}ID
+     * @param ids 需要删除的数据ID
      * @return 结果
      */
-	 @Override
-	public int delete${className}ById(${primaryKey.attrType} ${primaryKey.attrname})
+	@Override
+	public int delete${className}ByIds(String ids)
 	{
-	    return ${classname}Mapper.delete${className}ById(${primaryKey.attrname});
-	}
-	
-	/**
-     * 批量删除${tableComment}对象
-     * 
-     * @param ${primaryKey.attrname}s 需要删除的数据ID
-     * @return 结果
-     */
-	 @Override
-	public int batchDelete${className}(${primaryKey.attrType}[] ${primaryKey.attrname}s)
-	{
-		return ${classname}Mapper.batchDelete${className}(${primaryKey.attrname}s);
+		return ${classname}Mapper.delete${className}ByIds(Convert.toIntArray(ids));
 	}
 	
 }

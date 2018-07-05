@@ -5,21 +5,51 @@
 <body class="gray-bg">
     <div class="wrapper wrapper-content">
         <div class="btn-group hidden-xs" id="toolbar" role="group">
-	        <button type="button" class="btn btn-outline btn-default" onclick="javascript:add()" shiro:hasPermission="${moduleName}:${classname}:add">
-	            <i class="fa fa-plus"></i> –¬‘ˆ
+	        <button class="btn btn-outline btn-default" onclick="$.operate.add()" shiro:hasPermission="${moduleName}:${classname}:add">
+	            <i class="fa fa-plus"></i> Êñ∞Â¢û
 	        </button>
-	        <button type="button" class="btn btn-outline btn-default" onclick="javascript:batchRemove()" shiro:hasPermission="${moduleName}:${classname}:batchRemove">
-	            <i class="fa fa-trash-o"></i> …æ≥˝
+	        <button class="btn btn-outline btn-default" onclick="$.operate.batRemove()" shiro:hasPermission="${moduleName}:${classname}:remove">
+	            <i class="fa fa-trash-o"></i> Âà†Èô§
 	        </button>
         </div>
-        <table class="bootstrap-table" data-mobile-responsive="true">
+        <table id="bootstrap-table" data-mobile-responsive="true">
         </table>
     </div>
     <div th:include="include :: footer"></div>
-    <script th:src="@{/platform/${moduleName}/${classname}/${classname}.js}"></script>
     <script th:inline="javascript">
         var editFlag = [[${@permissionService.hasPermi('${moduleName}:${classname}:edit')}]];
         var removeFlag = [[${@permissionService.hasPermi('${moduleName}:${classname}:remove')}]];
+        var prefix = ctx + "${moduleName}/${classname}"
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                modalName: "${tableComment}",
+                columns: [{
+		            checkbox: true
+		        },
+#foreach($column in $columns)
+				{
+					field : '${column.attrname}', 
+					title : '${column.columnComment}' 
+				},
+#end
+		        {
+		            title: 'Êìç‰Ωú',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.${primaryKey.attrname} + '\')"><i class="fa fa-edit"></i>ÁºñËæë</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.${primaryKey.attrname} + '\')"><i class="fa fa-remove"></i>Âà†Èô§</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
     </script>
 </body>
 </html>

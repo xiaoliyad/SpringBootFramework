@@ -24,7 +24,7 @@ public class PageDomain
         {
             return "";
         }
-        return orderByColumn + " " + isAsc;
+        return StringUtils.toUnderScoreCase(orderByColumn) + " " + isAsc;
     }
 
     public Integer getPageNum()

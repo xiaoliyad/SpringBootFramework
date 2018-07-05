@@ -23,7 +23,7 @@ public class OperLog extends BaseEntity
     /** 来源渠道 */
     private String channel;
     /** 操作员名称 */
-    private String loginName;
+    private String operName;
     /** 部门名称 */
     private String deptName;
     /** 请求url */
@@ -91,14 +91,14 @@ public class OperLog extends BaseEntity
         this.channel = channel;
     }
 
-    public String getLoginName()
+    public String getOperName()
     {
-        return loginName;
+        return operName;
     }
 
-    public void setLoginName(String loginName)
+    public void setOperName(String operName)
     {
-        this.loginName = loginName;
+        this.operName = operName;
     }
 
     public String getDeptName()
@@ -185,9 +185,9 @@ public class OperLog extends BaseEntity
     public String toString()
     {
         return "OperLog [operId=" + operId + ", title=" + title + ", action=" + action + ", method=" + method
-                + ", channel=" + channel + ", loginName=" + loginName + ", deptName=" + deptName + ", operUrl="
-                + operUrl + ", operIp=" + operIp + ", operLocation=" + operLocation + ", operParam=" + operParam
-                + ", status=" + status + ", errorMsg=" + errorMsg + ", operTime=" + operTime + "]";
+                + ", channel=" + channel + ", operName=" + operName + ", deptName=" + deptName + ", operUrl=" + operUrl
+                + ", operIp=" + operIp + ", operLocation=" + operLocation + ", operParam=" + operParam + ", status="
+                + status + ", errorMsg=" + errorMsg + ", operTime=" + operTime + "]";
     }
 
 }

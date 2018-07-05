@@ -33,7 +33,7 @@ public interface UserRoleMapper
      * @param roleId 角色ID
      * @return 结果
      */
-    public int selectCountUserRoleByRoleId(Long roleId);
+    public int countUserRoleByRoleId(Long roleId);
 
     /**
      * 批量新增用户角色信息

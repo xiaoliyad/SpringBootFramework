@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.watchdata.common.constant.UserConstants;
+import com.watchdata.common.support.Convert;
 import com.watchdata.common.utils.StringUtils;
 import com.watchdata.common.utils.security.ShiroUtils;
 import com.watchdata.framework.shiro.service.PasswordService;
@@ -132,11 +133,17 @@ public class UserServiceImpl implements IUserService
      * @return 结果
      */
     @Override
-    public int batchDeleteUser(Long[] ids)
+    public void deleteUserByIds(String ids) throws Exception
     {
-        userRoleMapper.deleteUserRole(ids);
-        userPostMapper.deleteUserPost(ids);
-        return userMapper.batchDeleteUser(ids);
+        Long[] userIds = Convert.toLongArray(ids);
+        for (Long userId : userIds)
+        {
+            if (User.isAdmin(userId))
+            {
+                throw new Exception("不允许删除超级管理员用户");
+            }
+        }
+        userMapper.deleteUserByIds(userIds);
     }
 
     /**

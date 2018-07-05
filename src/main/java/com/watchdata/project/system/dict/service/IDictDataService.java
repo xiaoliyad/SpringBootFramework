@@ -50,7 +50,7 @@ public interface IDictDataService
      * @param ids 需要删除的数据
      * @return 结果
      */
-    public int batchDeleteDictData(Long[] ids);
+    public int deleteDictDataByIds(String ids);
 
     /**
      * 保存字典数据信息

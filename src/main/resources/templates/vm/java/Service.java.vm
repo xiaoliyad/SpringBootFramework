@@ -11,7 +11,6 @@ import java.util.List;
  */
 public interface I${className}Service 
 {
-	
 	/**
      * 查询${tableComment}信息
      * 
@@ -52,20 +51,13 @@ public interface I${className}Service
      */
 	public int save${className}(${className} ${classname});
 	
+	
 	/**
      * 删除${tableComment}信息
      * 
-     * @param ${primaryKey.attrname} ${tableComment}ID
+     * @param ids 需要删除的数据ID
      * @return 结果
      */
-	public int delete${className}ById(${primaryKey.attrType} ${primaryKey.attrname});
-	
-	/**
-     * 批量删除${tableComment}信息
-     * 
-     * @param ${primaryKey.attrname}s 需要删除的数据ID
-     * @return 结果
-     */
-	public int batchDelete${className}(${primaryKey.attrType}[] ${primaryKey.attrname}s);
+	public int delete${className}ByIds(String ids);
 	
 }

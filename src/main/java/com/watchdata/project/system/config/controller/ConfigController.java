@@ -9,14 +9,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.watchdata.project.system.config.domain.Config;
-import com.watchdata.project.system.config.service.IConfigService;
 import com.watchdata.framework.aspectj.lang.annotation.Log;
+import com.watchdata.framework.aspectj.lang.constant.BusinessType;
 import com.watchdata.framework.web.controller.BaseController;
+import com.watchdata.framework.web.domain.AjaxResult;
 import com.watchdata.framework.web.page.TableDataInfo;
-import com.watchdata.framework.web.domain.Message;
+import com.watchdata.project.system.config.domain.Config;
+import com.watchdata.project.system.config.service.IConfigService;
 
 /**
  * 参数配置 信息操作处理
@@ -56,7 +57,7 @@ public class ConfigController extends BaseController
      * 新增参数配置
      */
     @RequiresPermissions("system:config:add")
-    @Log(title = "系统管理", action = "参数配置-新增参数")
+    @Log(title = "参数管理", action = BusinessType.INSERT)
     @GetMapping("/add")
     public String add()
     {
@@ -67,7 +68,7 @@ public class ConfigController extends BaseController
      * 修改参数配置
      */
     @RequiresPermissions("system:config:edit")
-    @Log(title = "系统管理", action = "参数配置-修改参数")
+    @Log(title = "参数管理", action = BusinessType.UPDATE)
     @GetMapping("/edit/{configId}")
     public String edit(@PathVariable("configId") Integer configId, Model model)
     {
@@ -80,51 +81,34 @@ public class ConfigController extends BaseController
      * 保存参数配置
      */
     @RequiresPermissions("system:config:save")
-    @Log(title = "系统管理", action = "参数配置-保存参数")
+    @Log(title = "参数管理", action = BusinessType.SAVE)
     @PostMapping("/save")
     @ResponseBody
-    public Message save(Config config)
+    public AjaxResult save(Config config)
     {
         if (configService.saveConfig(config) > 0)
         {
-            return Message.success();
+            return success();
         }
-        return Message.error();
+        return error();
     }
 
     /**
      * 删除参数配置
      */
     @RequiresPermissions("system:config:remove")
-    @Log(title = "系统管理", action = "参数配置-删除参数")
-    @PostMapping("/remove/{configId}")
+    @Log(title = "参数管理", action = BusinessType.DELETE)
+    @PostMapping("/remove")
     @ResponseBody
-    public Message remove(@PathVariable("configId") Integer configId)
+    public AjaxResult remove(String ids)
     {
-        if (configService.deleteConfigById(configId) > 0)
+        if (configService.deleteConfigByIds(ids) > 0)
         {
-            return Message.success();
+            return success();
         }
-        return Message.error();
+        return error();
     }
 
-    /**
-     * 批量删除参数配置
-     */
-    @RequiresPermissions("system:config:batchRemove")
-    @Log(title = "系统管理", action = "参数配置-批量删除")
-    @PostMapping("/batchRemove")
-    @ResponseBody
-    public Message remove(@RequestParam("ids[]") Integer[] configIds)
-    {
-        int rows = configService.batchDeleteConfig(configIds);
-        if (rows > 0)
-        {
-            return Message.success();
-        }
-        return Message.error();
-    }
-    
     /**
      * 校验参数键名
      */

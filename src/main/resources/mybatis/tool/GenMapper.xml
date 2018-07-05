@@ -21,8 +21,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select table_name, table_comment, create_time, update_time
 		from information_schema.tables
 		where table_comment <![CDATA[ <> ]]> '' and table_schema = (select database())
-		<if test="searchValue != null and searchValue != ''">
-			AND table_name like concat('%', #{searchValue}, '%');
+		<if test="tableName != null and tableName != ''">
+			AND table_name like concat('%', #{tableName}, '%')
+		</if>
+		<if test="tableComment != null and tableComment != ''">
+			AND table_comment like concat('%', #{tableComment}, '%')
 		</if>
 	</select>
 	

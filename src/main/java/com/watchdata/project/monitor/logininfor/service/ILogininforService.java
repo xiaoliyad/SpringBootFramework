@@ -33,5 +33,5 @@ public interface ILogininforService
      * @param ids 需要删除的数据
      * @return
      */
-    public int batchDeleteLogininfor(Long[] ids);
+    public int deleteLogininforByIds(String ids);
 }

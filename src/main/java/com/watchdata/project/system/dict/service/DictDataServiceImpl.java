@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.watchdata.common.support.Convert;
 import com.watchdata.common.utils.StringUtils;
 import com.watchdata.common.utils.security.ShiroUtils;
 import com.watchdata.project.system.dict.domain.DictData;
@@ -76,9 +76,9 @@ public class DictDataServiceImpl implements IDictDataService
      * @return 结果
      */
     @Override
-    public int batchDeleteDictData(Long[] ids)
+    public int deleteDictDataByIds(String ids)
     {
-        return dictDataMapper.batchDeleteDictData(ids);
+        return dictDataMapper.deleteDictDataByIds(Convert.toLongArray(ids));
     }
 
     /**

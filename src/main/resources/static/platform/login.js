@@ -1,4 +1,3 @@
-
 $(function() {
     validateRule();
     $(".i-checks").iCheck({checkboxClass:"icheckbox_square-green-login"});
@@ -15,6 +14,7 @@ $.validator.setDefaults({
 });
 
 function login() {
+	$.modal.loading($("#btnSubmit").data("loading"));
 	var username = $("input[name='username']").val().trim();
     var password = $("input[name='password']").val().trim();
     var validateCode = $("input[name='validateCode']").val();
@@ -32,8 +32,9 @@ function login() {
             if (r.code == 0) {
                 location.href = ctx + 'index';
             } else {
+            	$.modal.closeLoading();
             	$('.imgcode').click();
-                layer.msg(r.msg);
+            	$.modal.msg(r.msg);
             }
         }
     });

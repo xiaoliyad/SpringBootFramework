@@ -65,6 +65,6 @@ public interface ConfigMapper
      * @param configIds 需要删除的数据ID
      * @return 结果
      */
-    public int batchDeleteConfig(Integer[] configIds);
+    public int deleteConfigByIds(Integer[] configIds);
 
 }

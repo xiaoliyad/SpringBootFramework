@@ -20,6 +20,6 @@ public class SwaggerController extends BaseController
     @GetMapping()
     public String index()
     {
-        return "redirect:" + "/swagger-ui.html";
+        return redirect("/swagger-ui.html");
     }
 }

@@ -6,7 +6,6 @@ import java.io.StringWriter;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.watchdata.common.constant.Constants;
 import com.watchdata.common.exception.base.BaseException;
 import com.watchdata.common.utils.StringUtils;
+import com.watchdata.framework.config.GenConfig;
 import com.watchdata.project.tool.gen.domain.ColumnInfo;
 import com.watchdata.project.tool.gen.domain.TableInfo;
 import com.watchdata.project.tool.gen.mapper.GenMapper;

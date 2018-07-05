@@ -11,6 +11,7 @@
     <link href="../static/css/style.css" th:href="@{css/style.css}" rel="stylesheet"/>
     <link href="../static/css/login.min.css" th:href="@{css/login.min.css}" rel="stylesheet"/>
     <link href="../static/ajax/libs/iCheck/custom.css" th:href="@{/ajax/libs/iCheck/custom.css}" rel="stylesheet"/>
+    <link href="../static/platform/css/ry-ui.min.css" th:href="@{/platform/css/ry-ui.min.css?v=2.0.0}" rel="stylesheet"/>
     <!--[if lt IE 9]>
     <meta http-equiv="refresh" content="0;ie.html" />
     <![endif]-->
@@ -50,7 +51,7 @@
 			</div>
 			<br>
 			<!-- <input class="i-checks left" type="checkbox" name="rememberme" />&nbsp;&nbsp;记住我	 -->	
-			<button type="submit" class="btn btn-primary block full-width m-b" id="btnSubmit" data-loading="正在验证登录，请稍后...">登 录</button>
+                    <button class="btn btn-success btn-block" id="btnSubmit" data-loading="正在验证登录，请稍后...">登录</button>
 
             <p class="text-muted text-center">
                 <a href="#">
@@ -72,6 +73,8 @@
 <script src="../static/ajax/libs/validate/messages_zh.min.js" th:src="@{ajax/libs/validate/messages_zh.min.js}"></script>
 <script src="../static/ajax/libs/layer/layer.min.js" th:src="@{ajax/libs/layer/layer.min.js}"></script>
 <script src="../static/ajax/libs/iCheck/icheck.min.js" th:src="@{/ajax/libs/iCheck/icheck.min.js}"></script>
+<script src="../static/ajax/libs/blockUI/jquery.blockUI.js" th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
+<script src="../static/platform/js/ry-ui.min.js?v=2.0.0" th:src="@{/platform/js/ry-ui.min.js?v=2.0.0}"></script>
 <script src="../static/platform/login.js" th:src="@{/platform/login.js}"></script>
 </body>
 </html>

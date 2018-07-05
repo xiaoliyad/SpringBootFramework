@@ -24,13 +24,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectLogininforList" parameterType="Logininfor" resultMap="LogininforResult">
 		select * from sys_logininfor
 		<where>
-			<if test="searchValue != null and searchValue != ''">
-				AND login_name like concat('%', #{searchValue}, '%')
+			<if test="ipaddr != null and ipaddr != ''">
+				AND ipaddr like concat('%', #{ipaddr}, '%')
+			</if>
+			<if test="status != null and status != ''">
+				AND status = #{status}
+			</if>
+			<if test="loginName != null and loginName != ''">
+				AND login_name like concat('%', #{loginName}, '%')
 			</if>
 		</where>
 	</select>
 	
-	<delete id="batchDeleteLogininfor" parameterType="Integer">
+	<delete id="deleteLogininforByIds" parameterType="Integer">
  		delete from sys_logininfor where info_id in
  		<foreach collection="array" item="infoId" open="(" separator="," close=")">
  			#{infoId}

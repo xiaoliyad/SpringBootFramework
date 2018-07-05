@@ -53,12 +53,31 @@
 			<div class="form-group">
 				<div class="form-control-static col-sm-offset-9">
 					<button type="submit" class="btn btn-primary">提交</button>
-					<button th:onclick="'javascript:layer_close()'" class="btn btn-danger" type="button">关闭</button>
+					<button onclick="$.modal.close()" class="btn btn-danger" type="button">关闭</button>
 				</div>
 			</div>
 		</form>
 	</div>
 	<div th:include="include::footer"></div>
-	<script th:src="@{/platform/monitor/job/add.js}"></script>
+	<script type="text/javascript">
+		var prefix = ctx + "monitor/job"
+	
+		$("#form-job-add").validate({
+			rules:{
+				jobName:{
+					required:true,
+				},
+				jobGroup:{
+					required:true,
+				},
+				cronExpression:{
+					required:true,
+				},
+			},
+			submitHandler:function(form){
+				$.operate.save(prefix + "/save", $('#form-job-add').serialize());
+			}
+		});
+	</script>
 </body>
 </html>

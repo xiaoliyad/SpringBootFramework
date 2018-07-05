@@ -18,9 +18,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="selectDictTypeList" parameterType="DictType" resultMap="DictTypeResult">
 		select dict_id, dict_name, dict_type, status, create_by, create_time, remark  from sys_dict_type
-		<where>
-			<if test="searchValue != null and searchValue != ''">
-				AND dict_name like concat('%', #{searchValue}, '%') OR dict_type like concat('%', #{searchValue}, '%')
+		 <where>
+			<if test="dictName != null and dictName != ''">
+				AND dict_name like concat('%', #{dictName}, '%')
+			</if>
+			<if test="status != null and status != ''">
+				AND status = #{status}
+			</if>
+			<if test="dictType != null and dictType != ''">
+				AND dict_type like concat('%', #{dictType}, '%')
 			</if>
 		</where>
 	</select>
@@ -41,7 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		delete from sys_dict_type where dict_id = #{dictId}
  	</delete>
 	
-	<delete id="batchDeleteDictType" parameterType="Long">
+	<delete id="deleteDictTypeByIds" parameterType="Long">
  		delete from sys_dict_type where dict_id in
  		<foreach collection="array" item="dictId" open="(" separator="," close=")">
  			#{dictId}

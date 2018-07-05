@@ -64,9 +64,8 @@ public interface IUserService
      * 批量删除用户信息
      * 
      * @param ids 需要删除的数据ID
-     * @return 结果
      */
-    public int batchDeleteUser(Long[] ids);
+    public void deleteUserByIds(String ids) throws Exception;
 
     /**
      * 保存用户信息

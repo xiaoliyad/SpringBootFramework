@@ -46,7 +46,7 @@
 	                            <p><i class="fa fa-group"></i> [[${user.dept.deptName}]] / [[${#strings.defaultString(postGroup,'无岗位')}]]</p>
 	                            <p><i class="fa fa-transgender"></i> [[${user.sex}]]</p>
 	                            <p><i class="fa fa-envelope-o"></i> [[${user.email}]]</p>
-	                            <p><i class="fa fa-calendar"></i> [[${user.createTime}]]</p>
+	                            <p><i class="fa fa-calendar"></i> [[${user.createTimeStr}]]</p>
 	                        </div>
 	                        <div class="clearfix"></div>
 	                    </a>
@@ -62,17 +62,17 @@
 	    /*用户信息-修改*/
 	    function edit() {
 	        var url = ctx + "system/user/profile/edit/" + userId;
-	        layer_showAuto("修改用户", url);
+	        $.modal.open("修改用户", url);
 	    }
 	    /*用户管理-重置密码*/
 	    function resetPwd() {
 	        var url = ctx + 'system/user/profile/resetPwd/' + userId;
-	        layer_show("重置密码", url, '800', '500');
+	        $.modal.open("重置密码", url, '800', '500');
 	    }
 	    /*用户管理-头像*/
 	    function avatar() {
 	        var url = ctx + 'system/user/profile/avatar/' + userId;
-	        layer_showAuto("修改头像", url);
+	        $.modal.open("修改头像", url);
 	    }
 	</script>
 </body>

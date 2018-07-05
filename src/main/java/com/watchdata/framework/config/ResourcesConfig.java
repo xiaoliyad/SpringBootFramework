@@ -2,10 +2,9 @@ package com.watchdata.framework.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * 通用配置
@@ -13,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @author 
  */
 @Configuration
-public class ResourcesConfig extends WebMvcConfigurerAdapter
+public class ResourcesConfig implements WebMvcConfigurer
 {
 
     /**
@@ -29,8 +28,6 @@ public class ResourcesConfig extends WebMvcConfigurerAdapter
     public void addViewControllers(ViewControllerRegistry registry)
     {
         registry.addViewController("/").setViewName("forward:" + indexUrl);
-        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
-        super.addViewControllers(registry);
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.watchdata.project.system.user.mapper;
 
-import java.util.List;
-
 import com.watchdata.project.system.user.domain.User;
+
+import java.util.List;
 
 /**
  * 用户表 数据层
@@ -66,7 +66,7 @@ public interface UserMapper
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int batchDeleteUser(Long[] ids);
+    public int deleteUserByIds(Long[] ids);
 
     /**
      * 修改用户信息
@@ -92,7 +92,6 @@ public interface UserMapper
      */
     public int checkLoginNameUnique(String loginName);
 
-
     /**
      * 校验手机号码是否唯一
      *
@@ -100,7 +99,6 @@ public interface UserMapper
      * @return 结果
      */
     public User checkPhoneUnique(String phonenumber);
-
 
     /**
      * 校验email是否唯一
@@ -110,9 +108,9 @@ public interface UserMapper
      */
     public User checkEmailUnique(String email);
 
-
     /**
      * 批量添加用户
+     * 
      * @param userList
      * @return
      */

@@ -2,15 +2,15 @@ package com.watchdata.project.system.user.controller;
 
 import com.watchdata.common.utils.StringUtils;
 import com.watchdata.framework.aspectj.lang.annotation.Log;
+import com.watchdata.framework.aspectj.lang.constant.BusinessType;
 import com.watchdata.framework.web.controller.BaseController;
-import com.watchdata.framework.web.domain.Message;
+import com.watchdata.framework.web.domain.AjaxResult;
 import com.watchdata.framework.web.page.TableDataInfo;
 import com.watchdata.project.system.post.domain.Post;
 import com.watchdata.project.system.post.service.IPostService;
 import com.watchdata.project.system.role.domain.Role;
 import com.watchdata.project.system.role.service.IRoleService;
 import com.watchdata.project.system.user.domain.User;
-import com.watchdata.project.system.user.domain.UserStatus;
 import com.watchdata.project.system.user.service.IUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +62,7 @@ public class UserController extends BaseController
      * 修改用户
      */
     @RequiresPermissions("system:user:edit")
-    @Log(title = "系统管理", action = "用户管理-修改用户")
+    @Log(title = "用户管理", action = BusinessType.UPDATE)
     @GetMapping("/edit/{userId}")
     public String edit(@PathVariable("userId") Long userId, Model model)
     {
@@ -79,7 +79,7 @@ public class UserController extends BaseController
      * 新增用户
      */
     @RequiresPermissions("system:user:add")
-    @Log(title = "系统管理", action = "用户管理-新增用户")
+    @Log(title = "用户管理", action = BusinessType.INSERT)
     @GetMapping("/add")
     public String add(Model model)
     {
@@ -89,9 +89,9 @@ public class UserController extends BaseController
         model.addAttribute("posts", posts);
         return prefix + "/add";
     }
-    
+
     @RequiresPermissions("system:user:resetPwd")
-    @Log(title = "系统管理", action = "用户管理-重置密码")
+    @Log(title = "重置密码", action = BusinessType.UPDATE)
     @GetMapping("/resetPwd/{userId}")
     public String resetPwd(@PathVariable("userId") Long userId, Model model)
     {
@@ -99,71 +99,53 @@ public class UserController extends BaseController
         model.addAttribute("user", user);
         return prefix + "/resetPwd";
     }
-    
+
     @RequiresPermissions("system:user:resetPwd")
-    @Log(title = "系统管理", action = "用户管理-重置密码")
+    @Log(title = "重置密码", action = BusinessType.SAVE)
     @PostMapping("/resetPwd")
     @ResponseBody
-    public Message resetPwd(User user)
+    public AjaxResult resetPwd(User user)
     {
         int rows = userService.resetUserPwd(user);
         if (rows > 0)
         {
-            return Message.success();
+            return success();
         }
-        return Message.error();
+        return error();
     }
 
     @RequiresPermissions("system:user:remove")
-    @Log(title = "系统管理", action = "用户管理-删除用户")
-    @RequestMapping("/remove/{userId}")
-    @Transactional(rollbackFor = Exception.class)
+    @Log(title = "用户管理", action = BusinessType.DELETE)
+    @PostMapping("/remove")
     @ResponseBody
-    public Message remove(@PathVariable("userId") Long userId)
+    public AjaxResult remove(String ids)
     {
-        User user = userService.selectUserById(userId);
-        if (user == null)
+        try
         {
-            return Message.error("用户不存在");
+            userService.deleteUserByIds(ids);
+            return success();
         }
-        else if (User.isAdmin(userId))
+        catch (Exception e)
         {
-            return Message.error("不允许删除超级管理员用户");
+            return error(e.getMessage());
         }
-        user.setStatus(UserStatus.DELETED.getCode());
-        return userService.updateUser(user) > 0 ? Message.success() : Message.error();
-    }
-
-    @RequiresPermissions("system:user:batchRemove")
-    @Log(title = "系统管理", action = "用户管理-批量删除")
-    @PostMapping("/batchRemove")
-    @Transactional(rollbackFor = Exception.class)
-    @ResponseBody
-    public Message batchRemove(@RequestParam("ids[]") Long[] ids)
-    {
-        int rows = userService.batchDeleteUser(ids);
-        if (rows > 0)
-        {
-            return Message.success();
-        }
-        return Message.error();
     }
 
     /**
      * 保存用户
      */
     @RequiresPermissions("system:user:save")
-    @Log(title = "系统管理", action = "用户管理-保存用户")
+    @Log(title = "用户管理", action = BusinessType.SAVE)
     @PostMapping("/save")
     @Transactional(rollbackFor = Exception.class)
     @ResponseBody
-    public Message save(User user)
+    public AjaxResult save(User user)
     {
         if (StringUtils.isNotNull(user.getUserId()) && User.isAdmin(user.getUserId()))
         {
-            return Message.error("不允许修改超级管理员用户");
+            return error("不允许修改超级管理员用户");
         }
-        return userService.saveUser(user) > 0 ? Message.success() : Message.error();
+        return userService.saveUser(user) > 0 ? success() : error();
     }
 
     /**
@@ -197,7 +179,7 @@ public class UserController extends BaseController
     }
 
     /**
-     * 校验手机号码
+     * 校验email邮箱
      */
     @PostMapping("/checkEmailUnique")
     @ResponseBody

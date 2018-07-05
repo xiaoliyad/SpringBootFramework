@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.watchdata.framework.aspectj.lang.annotation.Log;
+import com.watchdata.framework.aspectj.lang.constant.BusinessType;
 import com.watchdata.framework.web.controller.BaseController;
-import com.watchdata.framework.web.domain.Message;
+import com.watchdata.framework.web.domain.AjaxResult;
 import com.watchdata.framework.web.page.TableDataInfo;
 import com.watchdata.project.monitor.job.domain.JobLog;
 import com.watchdata.project.monitor.job.service.IJobLogService;
@@ -49,42 +50,21 @@ public class JobLogController extends BaseController
         return getDataTable(list);
     }
 
-    /**
-     * 调度日志删除
-     */
-    @Log(title = "监控管理", action = "定时任务-删除调度日志")
+    @Log(title = "调度日志", action = BusinessType.DELETE)
     @RequiresPermissions("monitor:job:remove")
-    @RequestMapping("/remove/{jobLogId}")
+    @PostMapping("/remove")
     @ResponseBody
-    public Message remove(@PathVariable("jobLogId") Long jobLogId)
-    {
-        JobLog jobLog = jobLogService.selectJobLogById(jobLogId);
-        if (jobLog == null)
-        {
-            return Message.error("调度任务不存在");
-        }
-        if (jobLogService.deleteJobLogById(jobLogId) > 0)
-        {
-            return Message.success();
-        }
-        return Message.error();
-    }
-
-    @Log(title = "监控管理", action = "定时任务-批量删除日志")
-    @RequiresPermissions("monitor:job:batchRemove")
-    @PostMapping("/batchRemove")
-    @ResponseBody
-    public Message batchRemove(@RequestParam("ids[]") Long[] ids)
+    public AjaxResult remove(String ids)
     {
         try
         {
-            jobLogService.batchDeleteJoblog(ids);
-            return Message.success();
+            jobLogService.deleteJobLogByIds(ids);
+            return success();
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return Message.error(e.getMessage());
+            return error(e.getMessage());
         }
     }
 }

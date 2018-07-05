@@ -40,6 +40,7 @@ public class User extends BaseEntity
     private String salt;
     /** 帐号状态:0正常,1禁用,2删除 */
     private int status;
+    private String delFlag;
     /** 最后登陆IP */
     private String loginIp;
     /** 最后登陆时间 */
@@ -191,6 +192,15 @@ public class User extends BaseEntity
     {
         this.status = status;
     }
+    public String getDelFlag()
+    {
+        return delFlag;
+    }
+
+    public void setDelFlag(String delFlag)
+    {
+        this.delFlag = delFlag;
+    }
 
     public String getLoginIp()
     {
@@ -248,8 +258,8 @@ public class User extends BaseEntity
         return "User [userId=" + userId + ", deptId=" + deptId + ", parentId=" + parentId + ", loginName=" + loginName
                 + ", userName=" + userName + ", email=" + email + ", phonenumber=" + phonenumber + ", sex=" + sex
                 + ", avatar=" + avatar + ", password=" + password + ", salt=" + salt + ", status=" + status
-                + ", loginIp=" + loginIp + ", loginDate=" + loginDate + ", dept=" + dept + ", roleIds="
-                + Arrays.toString(roleIds) + ", postIds=" + Arrays.toString(postIds) + "]";
+                + ", delFlag=" + delFlag + ", loginIp=" + loginIp + ", loginDate=" + loginDate + ", dept=" + dept
+                + ", roleIds=" + Arrays.toString(roleIds) + ", postIds=" + Arrays.toString(postIds) + "]";
     }
 
 }

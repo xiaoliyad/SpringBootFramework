@@ -57,7 +57,7 @@ public interface PostMapper
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int batchDeletePost(Long[] ids);
+    public int deletePostByIds(Long[] ids);
 
     /**
      * 修改岗位信息

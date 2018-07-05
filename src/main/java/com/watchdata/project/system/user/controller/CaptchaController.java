@@ -18,7 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
-import com.watchdata.framework.web.domain.Message;
+import com.watchdata.framework.web.controller.BaseController;
+import com.watchdata.framework.web.domain.AjaxResult;
 
 /**
  * 图片验证码（支持算术形式）
@@ -26,7 +27,7 @@ import com.watchdata.framework.web.domain.Message;
  */
 @Controller
 @RequestMapping("/captcha")
-public class CaptchaController
+public class CaptchaController extends BaseController
 {
 
     @Resource(name = "captchaProducer")
@@ -103,7 +104,7 @@ public class CaptchaController
      */
     @RequestMapping("/captchaVerify")
     @ResponseBody
-    public Message captchaVerify(String kaptchaCode, HttpServletRequest request)
+    public AjaxResult captchaVerify(String kaptchaCode, HttpServletRequest request)
     {
         try
         {
@@ -112,15 +113,15 @@ public class CaptchaController
             String code = String.valueOf(obj != null ? obj : "");
             if (StringUtils.isNotBlank(kaptchaCode) && kaptchaCode.equalsIgnoreCase(code))
             {
-                return Message.success("验证码正确");
+                return success("验证码正确");
             }
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return Message.error("系统错误：" + e.getMessage());
+            return error("系统错误：" + e.getMessage());
         }
-        return Message.error("验证码错误");
+        return error("验证码错误");
     }
 
 }

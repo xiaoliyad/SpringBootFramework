@@ -1,10 +1,10 @@
 package com.watchdata.project.system.post.service;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.watchdata.common.support.Convert;
 import com.watchdata.common.utils.StringUtils;
 import com.watchdata.common.utils.security.ShiroUtils;
 import com.watchdata.project.system.post.domain.Post;
@@ -92,21 +92,30 @@ public class PostServiceImpl implements IPostService
      * @return 结果
      */
     @Override
-    public int deletePostById(Long postId)
+    public boolean deletePostById(Long postId)
     {
-        return postMapper.deletePostById(postId);
+        return postMapper.deletePostById(postId) > 0 ? true : false;
     }
 
     /**
      * 批量删除岗位信息
      * 
      * @param ids 需要删除的数据ID
-     * @return 结果
+     * @throws Exception
      */
     @Override
-    public int batchDeletePost(Long[] ids)
+    public void deletePostByIds(String ids) throws Exception
     {
-        return postMapper.batchDeletePost(ids);
+        Long[] postIds = Convert.toLongArray(ids);
+        for (Long postId : postIds)
+        {
+            Post post = selectPostById(postId);
+            if (countUserPostById(postId) > 0)
+            {
+                throw new Exception(String.format("%1$s已分配,不能删除", post.getPostName()));
+            }
+        }
+        postMapper.deletePostByIds(postIds);
     }
 
     /**
@@ -142,9 +151,9 @@ public class PostServiceImpl implements IPostService
      * @return 结果
      */
     @Override
-    public int selectCountPostById(Long postId)
+    public int countUserPostById(Long postId)
     {
-        return userPostMapper.selectCountPostById(postId);
+        return userPostMapper.countUserPostById(postId);
     }
 
 }

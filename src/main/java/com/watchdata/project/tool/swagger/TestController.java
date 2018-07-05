@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.watchdata.framework.web.domain.Message;
-
+import com.watchdata.framework.web.controller.BaseController;
+import com.watchdata.framework.web.domain.AjaxResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiOperation;
 @Api("用户信息管理")
 @RestController
 @RequestMapping("/test/*")
-public class TestController
+public class TestController extends BaseController
 {
     private final static List<Test> testList = new ArrayList<>();
     {
@@ -41,25 +41,25 @@ public class TestController
 
     @ApiOperation("新增用户")
     @PostMapping("save")
-    public Message save(Test test)
+    public AjaxResult save(Test test)
     {
-        return testList.add(test) ? Message.success() : Message.error();
+        return testList.add(test) ? success() : error();
     }
 
     @ApiOperation("更新用户")
     @ApiImplicitParam(name = "Test", value = "单个用户信息", dataType = "Test")
     @PutMapping("update")
-    public Message update(Test test)
+    public AjaxResult update(Test test)
     {
-        return testList.remove(test) && testList.add(test) ? Message.success() : Message.error();
+        return testList.remove(test) && testList.add(test) ? success() : error();
     }
 
     @ApiOperation("删除用户")
     @ApiImplicitParam(name = "Tests", value = "单个用户信息", dataType = "Test")
     @DeleteMapping("delete")
-    public Message delete(Test test)
+    public AjaxResult delete(Test test)
     {
-        return testList.remove(test) ? Message.success() : Message.error();
+        return testList.remove(test) ? success() : error();
     }
 }
 

@@ -1,7 +1,6 @@
 package com.watchdata.project.system.role.controller;
 
 import java.util.List;
-
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,12 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.watchdata.framework.aspectj.lang.annotation.Log;
+import com.watchdata.framework.aspectj.lang.constant.BusinessType;
 import com.watchdata.framework.web.controller.BaseController;
-import com.watchdata.framework.web.domain.Message;
+import com.watchdata.framework.web.domain.AjaxResult;
 import com.watchdata.framework.web.page.TableDataInfo;
 import com.watchdata.project.system.role.domain.Role;
 import com.watchdata.project.system.role.service.IRoleService;
@@ -57,7 +56,7 @@ public class RoleController extends BaseController
      * 新增角色
      */
     @RequiresPermissions("system:role:add")
-    @Log(title = "系统管理", action = "角色管理-新增角色")
+    @Log(title = "角色管理", action = BusinessType.INSERT)
     @GetMapping("/add")
     public String add(Model model)
     {
@@ -68,7 +67,7 @@ public class RoleController extends BaseController
      * 修改角色
      */
     @RequiresPermissions("system:role:edit")
-    @Log(title = "系统管理", action = "角色管理-修改角色")
+    @Log(title = "角色管理", action = BusinessType.UPDATE)
     @GetMapping("/edit/{roleId}")
     public String edit(@PathVariable("roleId") Long roleId, Model model)
     {
@@ -81,54 +80,34 @@ public class RoleController extends BaseController
      * 保存角色
      */
     @RequiresPermissions("system:role:save")
-    @Log(title = "系统管理", action = "角色管理-保存角色")
+    @Log(title = "角色管理", action = BusinessType.SAVE)
     @PostMapping("/save")
-    @Transactional(rollbackFor=Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     @ResponseBody
-    public Message save(Role role)
+    public AjaxResult save(Role role)
     {
         if (roleService.saveRole(role) > 0)
         {
-            return Message.success();
+            return success();
         }
-        return Message.error();
+        return error();
     }
 
     @RequiresPermissions("system:role:remove")
-    @Log(title = "系统管理", action = "角色管理-删除角色")
-    @RequestMapping("/remove/{roleId}")
-    @Transactional(rollbackFor=Exception.class)
+    @Log(title = "角色管理", action = BusinessType.DELETE)
+    @PostMapping("/remove")
     @ResponseBody
-    public Message remove(@PathVariable("roleId") Long roleId)
+    public AjaxResult remove(String ids)
     {
-        Role role = roleService.selectRoleById(roleId);
-        if (role == null)
+        try
         {
-            return Message.error("角色不存在");
+            roleService.deleteRoleByIds(ids);
+            return success();
         }
-        if (roleService.selectCountUserRoleByRoleId(roleId) > 0)
+        catch (Exception e)
         {
-            return Message.error("角色已分配,不能删除");
+            return error(e.getMessage());
         }
-        if (roleService.deleteRoleById(roleId) > 0)
-        {
-            return Message.success();
-        }
-        return Message.error();
-    }
-
-    @RequiresPermissions("system:role:batchRemove")
-    @Log(title = "系统管理", action = "角色管理-批量删除")
-    @PostMapping("/batchRemove")
-    @ResponseBody
-    public Message batchRemove(@RequestParam("ids[]") Long[] ids)
-    {
-        int rows = roleService.batchDeleteRole(ids);
-        if (rows > 0)
-        {
-            return Message.success();
-        }
-        return Message.error();
     }
 
     /**

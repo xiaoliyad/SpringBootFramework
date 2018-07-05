@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.watchdata.framework.aspectj.lang.annotation.Log;
+import com.watchdata.framework.aspectj.lang.constant.BusinessType;
 import com.watchdata.framework.web.controller.BaseController;
-import com.watchdata.framework.web.domain.Message;
+import com.watchdata.framework.web.domain.AjaxResult;
 import com.watchdata.project.system.dept.domain.Dept;
 import com.watchdata.project.system.dept.service.IDeptService;
 
@@ -52,7 +53,7 @@ public class DeptController extends BaseController
     /**
      * 修改
      */
-    @Log(title = "系统管理", action = "部门管理-修改部门")
+    @Log(title = "部门管理", action = BusinessType.UPDATE)
     @RequiresPermissions("system:dept:edit")
     @GetMapping("/edit/{deptId}")
     public String edit(@PathVariable("deptId") Long deptId, Model model)
@@ -65,7 +66,7 @@ public class DeptController extends BaseController
     /**
      * 新增
      */
-    @Log(title = "系统管理", action = "部门管理-新增部门")
+    @Log(title = "部门管理", action = BusinessType.INSERT)
     @RequiresPermissions("system:dept:add")
     @GetMapping("/add/{parentId}")
     public String add(@PathVariable("parentId") Long parentId, Model model)
@@ -78,42 +79,41 @@ public class DeptController extends BaseController
     /**
      * 保存
      */
-    @Log(title = "系统管理", action = "部门管理-保存部门")
+    @Log(title = "部门管理", action = BusinessType.SAVE)
     @RequiresPermissions("system:dept:save")
     @PostMapping("/save")
     @ResponseBody
-    public Message save(Dept dept)
+    public AjaxResult save(Dept dept)
     {
         if (deptService.saveDept(dept) > 0)
         {
-            return Message.success();
+            return success();
         }
-        return Message.error();
+        return error();
     }
 
     /**
      * 删除
      */
-    @Log(title = "系统管理", action = "部门管理-删除部门")
+    @Log(title = "部门管理", action = BusinessType.DELETE)
     @RequiresPermissions("system:dept:remove")
-    @GetMapping("/remove/{deptId}")
+    @PostMapping("/remove/{deptId}")
     @ResponseBody
-    public Message remove(@PathVariable("deptId") Long deptId)
+    public AjaxResult remove(@PathVariable("deptId") Long deptId)
     {
         if (deptService.selectDeptCount(deptId) > 0)
         {
-            return Message.error(1, "存在下级部门,不允许删除");
+            return error(1, "存在下级部门,不允许删除");
         }
-
         if (deptService.checkDeptExistUser(deptId))
         {
-            return Message.error(1, "部门存在用户,不允许删除");
+            return error(1, "部门存在用户,不允许删除");
         }
         if (deptService.deleteDeptById(deptId) > 0)
         {
-            return Message.success();
+            return success();
         }
-        return Message.error();
+        return error();
     }
 
     /**

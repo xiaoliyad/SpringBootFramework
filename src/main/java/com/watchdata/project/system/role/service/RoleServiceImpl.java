@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.watchdata.common.constant.UserConstants;
+import com.watchdata.common.support.Convert;
 import com.watchdata.common.utils.StringUtils;
 import com.watchdata.common.utils.security.ShiroUtils;
 import com.watchdata.project.system.role.domain.Role;
@@ -124,23 +125,30 @@ public class RoleServiceImpl implements IRoleService
      * @return 结果
      */
     @Override
-    public int deleteRoleById(Long roleId)
+    public boolean deleteRoleById(Long roleId)
     {
-        roleMenuMapper.deleteRoleMenuByRoleId(roleId);
-        return roleMapper.deleteRoleById(roleId);
+        return roleMapper.deleteRoleById(roleId) > 0 ? true : false;
     }
 
     /**
-     * 批量删除角色用户信息
+     * 批量删除角色信息
      * 
      * @param ids 需要删除的数据ID
-     * @return 结果
+     * @throws Exception
      */
     @Override
-    public int batchDeleteRole(Long[] ids)
+    public void deleteRoleByIds(String ids) throws Exception
     {
-        roleMenuMapper.deleteRoleMenu(ids);
-        return roleMapper.batchDeleteRole(ids);
+        Long[] roleIds = Convert.toLongArray(ids);
+        for (Long roleId : roleIds)
+        {
+            Role role = selectRoleById(roleId);
+            if (countUserRoleByRoleId(roleId) > 0)
+            {
+                throw new Exception(String.format("%1$s已分配,不能删除", role.getRoleName()));
+            }
+        }
+        roleMapper.deleteRoleByIds(roleIds);
     }
 
     /**
@@ -224,9 +232,9 @@ public class RoleServiceImpl implements IRoleService
      * @return 结果
      */
     @Override
-    public int selectCountUserRoleByRoleId(Long roleId)
+    public int countUserRoleByRoleId(Long roleId)
     {
-        return userRoleMapper.selectCountUserRoleByRoleId(roleId);
+        return userRoleMapper.countUserRoleByRoleId(roleId);
     }
 
 }

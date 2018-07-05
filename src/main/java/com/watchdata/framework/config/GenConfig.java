@@ -26,7 +26,7 @@ public class GenConfig
         return author;
     }
 
-    public static void setAuthor(String author)
+    public void setAuthor(String author)
     {
         GenConfig.author = author;
     }
@@ -36,7 +36,7 @@ public class GenConfig
         return packageName;
     }
 
-    public static void setPackageName(String packageName)
+    public void setPackageName(String packageName)
     {
         GenConfig.packageName = packageName;
     }
@@ -46,7 +46,7 @@ public class GenConfig
         return autoRemovePre;
     }
 
-    public static void setAutoRemovePre(String autoRemovePre)
+    public void setAutoRemovePre(String autoRemovePre)
     {
         GenConfig.autoRemovePre = autoRemovePre;
     }
@@ -56,7 +56,7 @@ public class GenConfig
         return tablePrefix;
     }
 
-    public static void setTablePrefix(String tablePrefix)
+    public void setTablePrefix(String tablePrefix)
     {
         GenConfig.tablePrefix = tablePrefix;
     }

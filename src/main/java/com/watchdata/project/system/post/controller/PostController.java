@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.watchdata.framework.aspectj.lang.annotation.Log;
+import com.watchdata.framework.aspectj.lang.constant.BusinessType;
 import com.watchdata.framework.web.controller.BaseController;
-import com.watchdata.framework.web.domain.Message;
+import com.watchdata.framework.web.domain.AjaxResult;
 import com.watchdata.framework.web.page.TableDataInfo;
 import com.watchdata.project.system.post.domain.Post;
 import com.watchdata.project.system.post.service.IPostService;
@@ -50,49 +50,28 @@ public class PostController extends BaseController
         return getDataTable(list);
     }
 
-    /**
-     * 删除
-     */
-    @Log(title = "系统管理", action = "岗位管理-删除岗位")
-    @RequiresPermissions("system:post:remove")
-    @RequestMapping("/remove/{postId}")
-    @ResponseBody
-    public Message remove(@PathVariable("postId") Long postId)
-    {
-        Post post = postService.selectPostById(postId);
-        if (post == null)
-        {
-            return Message.error("岗位不存在");
-        }
-        if (postService.selectCountPostById(postId) > 0)
-        {
-            return Message.error("岗位已分配,不能删除");
-        }
-        if (postService.deletePostById(postId) > 0)
-        {
-            return Message.success();
-        }
-        return Message.error();
-    }
 
-    @RequiresPermissions("system:post:batchRemove")
-    @Log(title = "系统管理", action = "岗位管理-批量删除")
-    @PostMapping("/batchRemove")
+    @RequiresPermissions("system:post:remove")
+    @Log(title = "岗位管理", action = BusinessType.DELETE)
+    @PostMapping("/remove")
     @ResponseBody
-    public Message batchRemove(@RequestParam("ids[]") Long[] ids)
+    public AjaxResult remove(String ids)
     {
-        int rows = postService.batchDeletePost(ids);
-        if (rows > 0)
+        try
         {
-            return Message.success();
+            postService.deletePostByIds(ids);
+            return success();
         }
-        return Message.error();
+        catch (Exception e)
+        {
+            return error(e.getMessage());
+        }
     }
 
     /**
      * 新增岗位
      */
-    @Log(title = "系统管理", action = "岗位管理-新增岗位")
+    @Log(title = "岗位管理", action = BusinessType.INSERT)
     @RequiresPermissions("system:post:add")
     @GetMapping("/add")
     public String add(Model model)
@@ -103,7 +82,7 @@ public class PostController extends BaseController
     /**
      * 修改岗位
      */
-    @Log(title = "系统管理", action = "岗位管理-修改岗位")
+    @Log(title = "岗位管理", action = BusinessType.UPDATE)
     @RequiresPermissions("system:post:edit")
     @GetMapping("/edit/{postId}")
     public String edit(@PathVariable("postId") Long postId, Model model)
@@ -116,17 +95,17 @@ public class PostController extends BaseController
     /**
      * 保存岗位
      */
-    @Log(title = "系统管理", action = "岗位管理-保存岗位")
+    @Log(title = "岗位管理", action = BusinessType.SAVE)
     @RequiresPermissions("system:post:save")
     @PostMapping("/save")
     @ResponseBody
-    public Message save(Post post)
+    public AjaxResult save(Post post)
     {
         if (postService.savePost(post) > 0)
         {
-            return Message.success();
+            return success();
         }
-        return Message.error();
+        return error();
     }
 
 }
