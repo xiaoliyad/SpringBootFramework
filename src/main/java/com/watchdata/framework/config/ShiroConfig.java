@@ -150,6 +150,8 @@ public class ShiroConfig
         manager.setDeleteInvalidSessions(true);
         // 设置全局session超时时间
         manager.setGlobalSessionTimeout(expireTime * 60 * 1000);
+        // 去掉 JSESSIONID
+        manager.setSessionIdUrlRewritingEnabled(false);
         // 是否定时检查session
         manager.setSessionValidationSchedulerEnabled(true);
         // 自定义SessionDao
@@ -172,6 +174,8 @@ public class ShiroConfig
         manager.setDeleteInvalidSessions(true);
         // 设置全局session超时时间
         manager.setGlobalSessionTimeout(expireTime * 60 * 1000);
+        // 去掉 JSESSIONID
+        manager.setSessionIdUrlRewritingEnabled(false);
         // 定义要使用的无效的Session定时调度器
         manager.setSessionValidationScheduler(sessionValidationScheduler());
         // 是否定时检查session
@@ -240,9 +244,6 @@ public class ShiroConfig
 		filterChainDefinitionMap.put("/captcha/captchaImage**", "anon");
         // 退出 logout地址，shiro去清除session
         filterChainDefinitionMap.put("/logout", "logout");
-        //强制退出时, 退出logout地址，shiro去清除session，防止出现shiro报没有权限错误。
-        filterChainDefinitionMap.put("/monitor/online/batchForceLogout", "logout");
-        filterChainDefinitionMap.put("/monitor/online/forceLogout/**", "logout");
         // 不需要拦截的访问
         filterChainDefinitionMap.put("/login", "anon,captchaValidate");
         // 系统权限列表
