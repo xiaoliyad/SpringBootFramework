@@ -49,14 +49,20 @@ function validateRule() {
             },
             password: {
                 required: true
+            },
+            validateCode: {
+                required: true
             }
         },
         messages: {
             username: {
-                required: icon + "请输入您的用户名",
+            	required: icon + "请输入您的用户名"
             },
             password: {
-                required: icon + "请输入您的密码",
+            	required: icon + "请输入您的密码"
+            },
+            validateCode:{
+            	required: icon + "请输入验证码"
             }
         }
     })

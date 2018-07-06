@@ -46,23 +46,27 @@
             </div>
             <div class="col-md-6">
                 <div class="ibox-content">
-                    <form class="m-t" id="signupForm">
+                    <form class="form-horizontal m-t" id="signupForm">
                         <div class="form-group">
-                            <input type="text" name="username" class="form-control uname" placeholder="用户名" required="">
+                        	<div class="col-xs-12">
+                            	<input type="text" name="username" class="form-control" placeholder="用户名">
+                            </div>
                         </div>
                         <div class="form-group">
-                            <input type="password" name="password" class="form-control pword m-b" placeholder="密码" required="">
+                        	<div class="col-xs-12">
+                            	<input type="password" name="password" class="form-control" placeholder="密码">
+                            </div>
                         </div>
                         
-                        <div class="row" th:if="${captchaEbabled==true}">
-							<div class="col-xs-6">
-							<input type="text" name="validateCode" class="form-control code" placeholder="验证码" maxlength="5">
+                        <div class="form-group" th:if="${captchaEbabled==true}">
+							<div class="col-xs-8">
+								<input type="text" name="validateCode" class="form-control" placeholder="验证码" maxlength="5">
 							</div>
-						<div class="col-xs-5">
-							<a href="javascript:void(0);" title="点击更换验证码">
-							<img th:src="@{captcha/captchaImage(type=${captchaType})}" class="imgcode" width="80%"/>
-							</a>
-						</div>
+							<div class="col-xs-4">
+								<a href="javascript:void(0);" title="点击更换验证码">
+								<img th:src="@{captcha/captchaImage(type=${captchaType})}" class="imgcode" width="95%"/>
+								</a>
+							</div>
 					</div>
 					<br>
                         <button id="btnSubmit" data-loading="正在验证登录，请稍后..." class="btn btn-primary block full-width m-b">登陆</button>
