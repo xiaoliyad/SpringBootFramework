@@ -17,7 +17,7 @@
 								表描述：<input type="text" name="tableComment"/>
 							</li>
 							<li>
-								<a class="btn btn-w-m btn-primary" onclick="$.table.search($('form').attr('id'))"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-w-m btn-search" onclick="$.table.search($('form').attr('id'))"><i class="fa fa-search"></i>&nbsp;搜索</a>
 							</li>
 						</ul>
 					</div>
@@ -68,7 +68,7 @@
 		            title: '操作',
 		            align: 'center',
 		            formatter: function(value, row, index) {
-		                var msg = '<a class="btn btn-primary btn-xs" href="#" onclick="genCode(\'' + row.tableName + '\')"><i class="fa fa-bug"></i>生成代码</a> ';
+		                var msg = '<a class="btn btn-info btn-xs" href="#" onclick="genCode(\'' + row.tableName + '\')"><i class="fa fa-bug"></i>生成代码</a> ';
 		                return msg;
 		            }
 		        }]

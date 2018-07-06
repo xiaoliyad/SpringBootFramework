@@ -23,7 +23,7 @@
 								</select>
 							</li>
 						<li>
-								<a class="btn btn-w-m btn-primary" onclick="$.table.search($('form').attr('id'))"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-w-m btn-search" onclick="$.table.search($('form').attr('id'))"><i class="fa fa-search"></i>&nbsp;搜索</a>
 							</li>
 						</ul>
 					</div>
@@ -115,7 +115,7 @@
 		            formatter: function(value, row, index) {
 		                var actions = [];
 		                actions.push(statusTools(row));
-		                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.jobId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+		                actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.jobId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
 		                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.jobId + '\')"><i class="fa fa-remove"></i>删除</a>');
 		                return actions.join('');
 		            }
