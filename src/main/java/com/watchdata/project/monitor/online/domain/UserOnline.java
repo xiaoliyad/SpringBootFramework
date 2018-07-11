@@ -2,7 +2,6 @@ package com.watchdata.project.monitor.online.domain;
 
 import java.util.Date;
 
-import com.watchdata.common.utils.AddressUtils;
 import com.watchdata.framework.web.domain.BaseEntity;
 import com.watchdata.project.monitor.online.domain.OnlineSession.OnlineStatus;
 
@@ -63,7 +62,7 @@ public class UserOnline extends BaseEntity
         online.setLastAccessTime(session.getLastAccessTime());
         online.setExpireTime(session.getTimeout());
         online.setIpaddr(session.getHost());
-        online.setLonginLocation(AddressUtils.getRealAddressByIP(session.getHost()));
+        online.setLonginLocation(session.getHost());
         online.setBrowser(session.getBrowser());
         online.setOs(session.getOs());
         online.setStatus(session.getStatus());

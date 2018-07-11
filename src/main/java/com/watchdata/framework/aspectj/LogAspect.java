@@ -3,7 +3,7 @@ package com.watchdata.framework.aspectj;
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.Map;
-import com.watchdata.common.utils.AddressUtils;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
+
 import com.alibaba.fastjson.JSONObject;
 import com.watchdata.common.utils.ServletUtils;
 import com.watchdata.common.utils.StringUtils;
@@ -94,7 +95,7 @@ public class LogAspect
             String ip = ShiroUtils.getIp();
             operLog.setOperIp(ip);
             // 操作地点
-            operLog.setOperLocation(AddressUtils.getRealAddressByIP(ip));
+            operLog.setOperLocation(ip);
 
             operLog.setOperUrl(ServletUtils.getRequest().getRequestURI());
             if (currentUser != null)
