@@ -1,11 +1,9 @@
-package com.watchdata.common.utils;
+package com.watchdata.common.toolkits;
 
 import java.util.Collection;
 import java.util.Map;
 
 import org.apache.commons.lang.text.StrBuilder;
-
-import com.watchdata.common.support.StrFormatter;
 
 /**
  * 字符串工具类

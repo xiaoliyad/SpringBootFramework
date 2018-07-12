@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.watchdata.common.constant.Constants;
 import com.watchdata.common.exception.base.BaseException;
-import com.watchdata.common.utils.StringUtils;
+import com.watchdata.common.toolkits.StringUtils;
 import com.watchdata.framework.config.GenConfig;
 import com.watchdata.project.tool.gen.domain.ColumnInfo;
 import com.watchdata.project.tool.gen.domain.TableInfo;

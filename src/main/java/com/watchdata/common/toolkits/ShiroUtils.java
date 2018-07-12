@@ -1,4 +1,4 @@
-package com.watchdata.common.utils.security;
+package com.watchdata.common.toolkits;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.mgt.RealmSecurityManager;

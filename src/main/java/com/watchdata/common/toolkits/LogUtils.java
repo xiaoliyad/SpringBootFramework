@@ -1,4 +1,4 @@
-package com.watchdata.common.utils;
+package com.watchdata.common.toolkits;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.shiro.SecurityUtils;

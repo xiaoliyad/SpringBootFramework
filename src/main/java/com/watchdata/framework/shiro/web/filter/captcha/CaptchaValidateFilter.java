@@ -8,8 +8,8 @@ import org.apache.shiro.web.filter.AccessControlFilter;
 
 import com.google.code.kaptcha.Constants;
 import com.watchdata.common.constant.ShiroConstants;
-import com.watchdata.common.utils.StringUtils;
-import com.watchdata.common.utils.security.ShiroUtils;
+import com.watchdata.common.toolkits.ShiroUtils;
+import com.watchdata.common.toolkits.StringUtils;
 
 /**
  * 验证码过滤器

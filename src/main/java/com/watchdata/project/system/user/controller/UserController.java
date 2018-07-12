@@ -1,6 +1,6 @@
 package com.watchdata.project.system.user.controller;
 
-import com.watchdata.common.utils.StringUtils;
+import com.watchdata.common.toolkits.StringUtils;
 import com.watchdata.framework.aspectj.lang.annotation.Log;
 import com.watchdata.framework.aspectj.lang.constant.BusinessType;
 import com.watchdata.framework.web.controller.BaseController;

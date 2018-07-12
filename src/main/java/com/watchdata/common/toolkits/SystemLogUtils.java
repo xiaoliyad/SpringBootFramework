@@ -1,4 +1,4 @@
-package com.watchdata.common.utils;
+package com.watchdata.common.toolkits;
 
 import java.util.Date;
 
@@ -6,8 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.watchdata.common.constant.Constants;
-import com.watchdata.common.utils.security.ShiroUtils;
-import com.watchdata.common.utils.spring.SpringUtils;
 import com.watchdata.project.monitor.logininfor.domain.Logininfor;
 import com.watchdata.project.monitor.logininfor.service.LogininforServiceImpl;
 

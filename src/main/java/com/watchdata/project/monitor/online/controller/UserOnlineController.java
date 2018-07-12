@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.watchdata.common.utils.security.ShiroUtils;
+import com.watchdata.common.toolkits.ShiroUtils;
 import com.watchdata.framework.aspectj.lang.annotation.Log;
 import com.watchdata.framework.aspectj.lang.constant.BusinessType;
 import com.watchdata.framework.shiro.session.OnlineSessionDAO;

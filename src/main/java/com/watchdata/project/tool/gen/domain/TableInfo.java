@@ -2,7 +2,7 @@ package com.watchdata.project.tool.gen.domain;
 
 import java.util.List;
 
-import com.watchdata.common.utils.StringUtils;
+import com.watchdata.common.toolkits.StringUtils;
 import com.watchdata.framework.web.domain.BaseEntity;
 
 /**

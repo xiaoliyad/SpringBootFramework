@@ -24,7 +24,7 @@ import com.watchdata.common.exception.user.UserBlockedException;
 import com.watchdata.common.exception.user.UserNotExistsException;
 import com.watchdata.common.exception.user.UserPasswordNotMatchException;
 import com.watchdata.common.exception.user.UserPasswordRetryLimitExceedException;
-import com.watchdata.common.utils.security.ShiroUtils;
+import com.watchdata.common.toolkits.ShiroUtils;
 import com.watchdata.framework.shiro.service.LoginService;
 import com.watchdata.project.system.menu.service.IMenuService;
 import com.watchdata.project.system.role.service.IRoleService;

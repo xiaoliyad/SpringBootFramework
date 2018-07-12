@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.watchdata.common.constant.UserConstants;
-import com.watchdata.common.utils.StringUtils;
-import com.watchdata.common.utils.security.ShiroUtils;
+import com.watchdata.common.toolkits.ShiroUtils;
+import com.watchdata.common.toolkits.StringUtils;
 import com.watchdata.project.system.dept.domain.Dept;
 import com.watchdata.project.system.dept.mapper.DeptMapper;
 

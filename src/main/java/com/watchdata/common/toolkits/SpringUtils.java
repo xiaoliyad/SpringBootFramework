@@ -1,4 +1,4 @@
-package com.watchdata.common.utils.spring;
+package com.watchdata.common.toolkits;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;

@@ -2,7 +2,7 @@ package com.watchdata.common.exception.base;
 
 import org.springframework.util.StringUtils;
 
-import com.watchdata.common.utils.MessageUtils;
+import com.watchdata.common.toolkits.MessageUtils;
 
 /**
  * 基础异常

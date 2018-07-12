@@ -1,6 +1,4 @@
-package com.watchdata.common.support;
-
-import com.watchdata.common.utils.StringUtils;
+package com.watchdata.common.toolkits;
 
 /**
  * 字符串格式化

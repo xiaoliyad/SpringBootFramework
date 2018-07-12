@@ -1,8 +1,7 @@
-package com.watchdata.common.support;
+package com.watchdata.common.toolkits;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import com.watchdata.common.utils.StringUtils;
 
 /**
  * 字符集工具类

@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 import com.watchdata.common.constant.Constants;
 import com.watchdata.common.exception.user.UserPasswordNotMatchException;
 import com.watchdata.common.exception.user.UserPasswordRetryLimitExceedException;
-import com.watchdata.common.utils.MessageUtils;
-import com.watchdata.common.utils.SystemLogUtils;
+import com.watchdata.common.toolkits.MessageUtils;
+import com.watchdata.common.toolkits.SystemLogUtils;
 import com.watchdata.project.system.user.domain.User;
 
 /**

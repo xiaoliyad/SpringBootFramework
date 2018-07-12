@@ -1,4 +1,4 @@
-package com.watchdata.common.utils;
+package com.watchdata.common.toolkits;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

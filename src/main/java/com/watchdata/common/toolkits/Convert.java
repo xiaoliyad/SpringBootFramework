@@ -1,4 +1,4 @@
-package com.watchdata.common.support;
+package com.watchdata.common.toolkits;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -6,7 +6,6 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.text.NumberFormat;
 import java.util.Set;
-import com.watchdata.common.utils.StringUtils;
 
 /**
  * 类型转换器

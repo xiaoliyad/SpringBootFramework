@@ -1,6 +1,6 @@
 package com.watchdata.framework.web.page;
 
-import com.watchdata.common.utils.StringUtils;
+import com.watchdata.common.toolkits.StringUtils;
 
 /**
  * 分页数据

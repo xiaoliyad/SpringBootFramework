@@ -1,8 +1,6 @@
-package com.watchdata.common.utils;
+package com.watchdata.common.toolkits;
 
 import org.springframework.context.MessageSource;
-
-import com.watchdata.common.utils.spring.SpringUtils;
 
 /**
  * 获取i18n资源文件
