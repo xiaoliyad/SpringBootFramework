@@ -37,7 +37,7 @@
 	</div>
 	<div th:include="include :: footer"></div>
 	<script type="text/javascript">
-		var prefix = ctx + "tool/gen"
+		var prefix = ctx + "tool/gen";
 	
 		$(function() {
 		    var options = {
@@ -78,9 +78,11 @@
 	
 		// 生成代码
 		function genCode(tableName) {
-		    $.modal.confirm("确定要生成" + tableName + "表代码吗？", function() {
-		        location.href = prefix + "/genCode/" + tableName;
-		        layer.msg('执行成功,正在生成代码请稍后…', { icon: 1 });
+			alert(prefix);
+			var moduleName=prompt("请输入module名称","module");
+			  $.modal.confirm("确定要生成" + tableName + "表代码吗？", function() {
+			    location.href = prefix + "/genCode/"+ tableName+"/"+moduleName;
+				layer.msg('执行成功,正在生成代码请稍后…', {icon: 1});
 		    })
 		}
 	
