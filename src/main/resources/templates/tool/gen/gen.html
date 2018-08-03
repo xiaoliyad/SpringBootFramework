@@ -57,11 +57,11 @@
 		            title: '表描述'
 		        },
 		        {
-		            field: 'createDateTimeStr',
+		            field: 'createTime',
 		            title: '创建时间'
 		        },
 		        {
-		            field: 'updateDateTimeStr',
+		            field: 'updateTime',
 		            title: '更新时间'
 		        },
 		        {
@@ -78,7 +78,6 @@
 	
 		// 生成代码
 		function genCode(tableName) {
-			alert(prefix);
 			var moduleName=prompt("请输入module名称","module");
 			  $.modal.confirm("确定要生成" + tableName + "表代码吗？", function() {
 			    location.href = prefix + "/genCode/"+ tableName+"/"+moduleName;
