@@ -2,6 +2,7 @@ package com.watchdata.project.monitor.job.domain;
 
 import java.io.Serializable;
 
+import com.watchdata.common.constant.ScheduleConstants;
 import com.watchdata.framework.web.domain.BaseEntity;
 
 /**
@@ -22,9 +23,10 @@ public class Job extends BaseEntity implements Serializable
     /** 任务方法 */
     private String methodName;
     /** 方法参数 */
-    private String params;
+    private String methodParams;
     /** cron执行表达式 */
     private String cronExpression;
+    private String misfirePolicy = ScheduleConstants.MISFIRE_DEFAULT;
     /** 状态（0正常 1暂停） */
     private int status;
 
@@ -68,14 +70,14 @@ public class Job extends BaseEntity implements Serializable
         this.methodName = methodName;
     }
 
-    public String getParams()
+    public String getMethodParams()
     {
-        return params;
+        return methodParams;
     }
 
-    public void setParams(String params)
+    public void setMethodParams(String methodParams)
     {
-        this.params = params;
+        this.methodParams = methodParams;
     }
 
     public String getCronExpression()
@@ -86,6 +88,16 @@ public class Job extends BaseEntity implements Serializable
     public void setCronExpression(String cronExpression)
     {
         this.cronExpression = cronExpression;
+    }
+
+    public String getMisfirePolicy()
+    {
+        return misfirePolicy;
+    }
+
+    public void setMisfirePolicy(String misfirePolicy)
+    {
+        this.misfirePolicy = misfirePolicy;
     }
 
     public int getStatus()
@@ -102,7 +114,7 @@ public class Job extends BaseEntity implements Serializable
     public String toString()
     {
         return "Job [jobId=" + jobId + ", jobName=" + jobName + ", jobGroup=" + jobGroup + ", methodName=" + methodName
-                + ", params=" + params + ", cronExpression=" + cronExpression + ", status=" + status + "]";
+                + ", methodParams=" + methodParams + ", cronExpression=" + cronExpression + ", status=" + status + "]";
     }
 
 }

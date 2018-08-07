@@ -133,7 +133,7 @@ public class UserServiceImpl implements IUserService
      * @return 结果
      */
     @Override
-    public void deleteUserByIds(String ids) throws Exception
+    public int deleteUserByIds(String ids) throws Exception
     {
         Long[] userIds = Convert.toLongArray(ids);
         for (Long userId : userIds)
@@ -143,48 +143,50 @@ public class UserServiceImpl implements IUserService
                 throw new Exception("不允许删除超级管理员用户");
             }
         }
-        userMapper.deleteUserByIds(userIds);
+        return userMapper.deleteUserByIds(userIds);
     }
 
     /**
-     * 保存用户信息
+     * 新增保存用户信息
      * 
      * @param user 用户信息
      * @return 结果
      */
     @Override
-    public int saveUser(User user)
+    public int insertUser(User user)
     {
-        int count = 0;
-        Long userId = user.getUserId();
-        if (StringUtils.isNotNull(userId))
-        {
-            user.setUpdateBy(ShiroUtils.getLoginName());
-            // 修改用户信息
-            count = updateUser(user);
-            // 删除用户与角色关联
-            userRoleMapper.deleteUserRoleByUserId(userId);
-            // 新增用户与角色管理
-            insertUserRole(user);
-            // 删除用户与岗位关联
-            userPostMapper.deleteUserPostByUserId(userId);
-            // 新增用户与岗位管理
-            insertUserPost(user);
+        user.randomSalt();
+        user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
+        user.setCreateBy(ShiroUtils.getLoginName());
+        // 新增用户信息
+        int rows = userMapper.insertUser(user);
+        // 新增用户岗位关联
+        insertUserPost(user);
+        // 新增用户与角色管理
+        insertUserRole(user);
+        return rows;
+    }
 
-        }
-        else
-        {
-            user.randomSalt();
-            user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
-            user.setCreateBy(ShiroUtils.getLoginName());
-            // 新增用户信息
-            count = userMapper.insertUser(user);
-            // 新增用户岗位关联
-            insertUserPost(user);
-            // 新增用户与角色管理
-            insertUserRole(user);
-        }
-        return count;
+    /**
+     * 修改保存用户信息
+     * 
+     * @param user 用户信息
+     * @return 结果
+     */
+    @Override
+    public int updateUser(User user)
+    {
+        Long userId = user.getUserId();
+        user.setUpdateBy(ShiroUtils.getLoginName());
+        // 删除用户与角色关联
+        userRoleMapper.deleteUserRoleByUserId(userId);
+        // 新增用户与角色管理
+        insertUserRole(user);
+        // 删除用户与岗位关联
+        userPostMapper.deleteUserPostByUserId(userId);
+        // 新增用户与岗位管理
+        insertUserPost(user);
+        return userMapper.updateUser(user);
     }
 
     /**
@@ -194,7 +196,7 @@ public class UserServiceImpl implements IUserService
      * @return 结果
      */
     @Override
-    public int updateUser(User user)
+    public int updateUserInfo(User user)
     {
         return userMapper.updateUser(user);
     }
@@ -210,7 +212,7 @@ public class UserServiceImpl implements IUserService
     {
         user.randomSalt();
         user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
-        return updateUser(user);
+        return updateUserInfo(user);
     }
 
     /**
@@ -283,14 +285,9 @@ public class UserServiceImpl implements IUserService
     @Override
     public String checkPhoneUnique(User user)
     {
-        if (user.getUserId() == null)
-        {
-            user.setUserId(-1L);
-        }
-        Long userId = user.getUserId();
+        Long userId = StringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
         User info = userMapper.checkPhoneUnique(user.getPhonenumber());
-        if (StringUtils.isNotNull(info) && StringUtils.isNotNull(info.getUserId())
-                && info.getUserId().longValue() != userId.longValue())
+        if (StringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
         {
             return UserConstants.USER_PHONE_NOT_UNIQUE;
         }
@@ -306,14 +303,9 @@ public class UserServiceImpl implements IUserService
     @Override
     public String checkEmailUnique(User user)
     {
-        if (user.getUserId() == null)
-        {
-            user.setUserId(-1L);
-        }
-        Long userId = user.getUserId();
+        Long userId = StringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
         User info = userMapper.checkEmailUnique(user.getEmail());
-        if (StringUtils.isNotNull(info) && StringUtils.isNotNull(info.getUserId())
-                && info.getUserId().longValue() != userId.longValue())
+        if (StringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
         {
             return UserConstants.USER_EMAIL_NOT_UNIQUE;
         }

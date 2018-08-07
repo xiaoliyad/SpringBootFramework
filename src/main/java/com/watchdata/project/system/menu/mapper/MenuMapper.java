@@ -37,6 +37,14 @@ public interface MenuMapper
     public List<String> selectMenuTree(Long roleId);
 
     /**
+     * 查询系统菜单列表
+     * 
+     * @param menu 菜单信息
+     * @return 菜单列表
+     */
+    public List<Menu> selectMenuList(Menu menu);
+
+    /**
      * 查询系统所有菜单
      * 
      * @return 菜单列表

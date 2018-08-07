@@ -57,6 +57,17 @@ public class MenuServiceImpl implements IMenuService
      * @return 所有菜单信息
      */
     @Override
+    public List<Menu> selectMenuList(Menu menu)
+    {
+        return menuMapper.selectMenuList(menu);
+    }
+
+    /**
+     * 查询菜单集合
+     * 
+     * @return 所有菜单信息
+     */
+    @Override
     public List<Menu> selectMenuAll()
     {
         return menuMapper.selectMenuAll();
@@ -161,6 +172,7 @@ public class MenuServiceImpl implements IMenuService
             deptMap.put("id", menu.getMenuId());
             deptMap.put("pId", menu.getParentId());
             deptMap.put("name", transMenuName(menu, roleMenuList, permsFlag));
+            deptMap.put("title", menu.getMenuName());
             if (isCheck)
             {
                 deptMap.put("checked", roleMenuList.contains(menu.getMenuId() + menu.getPerms()));
@@ -241,21 +253,25 @@ public class MenuServiceImpl implements IMenuService
      * @return 结果
      */
     @Override
-    public int saveMenu(Menu menu)
+    public int insertMenu(Menu menu)
     {
-        Long menuId = menu.getMenuId();
-        if (StringUtils.isNotNull(menuId))
-        {
-            menu.setUpdateBy(ShiroUtils.getLoginName());
-            ShiroUtils.clearCachedAuthorizationInfo();
-            return menuMapper.updateMenu(menu);
-        }
-        else
-        {
-            menu.setCreateBy(ShiroUtils.getLoginName());
-            ShiroUtils.clearCachedAuthorizationInfo();
-            return menuMapper.insertMenu(menu);
-        }
+        menu.setCreateBy(ShiroUtils.getLoginName());
+        ShiroUtils.clearCachedAuthorizationInfo();
+        return menuMapper.insertMenu(menu);
+    }
+
+    /**
+     * 修改保存菜单信息
+     * 
+     * @param menu 菜单信息
+     * @return 结果
+     */
+    @Override
+    public int updateMenu(Menu menu)
+    {
+        menu.setUpdateBy(ShiroUtils.getLoginName());
+        ShiroUtils.clearCachedAuthorizationInfo();
+        return menuMapper.updateMenu(menu);
     }
 
     /**

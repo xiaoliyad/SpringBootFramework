@@ -47,6 +47,19 @@ public class DictDataServiceImpl implements IDictDataService
     }
 
     /**
+     * 根据字典类型和字典键值查询字典数据信息
+     * 
+     * @param dictType 字典类型
+     * @param dictValue 字典键值
+     * @return 字典标签
+     */
+    @Override
+    public String selectDictLabel(String dictType, String dictValue)
+    {
+        return dictDataMapper.selectDictLabel(dictType, dictValue);
+    }
+
+    /**
      * 根据字典数据ID查询信息
      * 
      * @param dictCode 字典数据ID
@@ -89,19 +102,23 @@ public class DictDataServiceImpl implements IDictDataService
      * @return 结果
      */
     @Override
-    public int saveDictData(DictData dictData)
+    public int insertDictData(DictData dictData)
     {
-        Long dictCode = dictData.getDictCode();
-        if (StringUtils.isNotNull(dictCode))
-        {
-            dictData.setUpdateBy(ShiroUtils.getLoginName());
-            return dictDataMapper.updateDictData(dictData);
-        }
-        else
-        {
-            dictData.setCreateBy(ShiroUtils.getLoginName());
-            return dictDataMapper.insertDictData(dictData);
-        }
+        dictData.setCreateBy(ShiroUtils.getLoginName());
+        return dictDataMapper.insertDictData(dictData);
+    }
+
+    /**
+     * 修改保存字典数据信息
+     * 
+     * @param dictData 字典数据信息
+     * @return 结果
+     */
+    @Override
+    public int updateDictData(DictData dictData)
+    {
+        dictData.setUpdateBy(ShiroUtils.getLoginName());
+        return dictDataMapper.updateDictData(dictData);
     }
 
 }

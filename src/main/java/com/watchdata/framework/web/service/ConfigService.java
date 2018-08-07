@@ -1,7 +1,8 @@
 package com.watchdata.framework.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 import com.watchdata.project.system.config.service.IConfigService;
 
 /**
@@ -9,7 +10,7 @@ import com.watchdata.project.system.config.service.IConfigService;
  * 
  * @author 
  */
-@Component
+@Service("config")
 public class ConfigService
 {
     @Autowired
@@ -21,7 +22,7 @@ public class ConfigService
      * @param configName 参数名称
      * @return 参数键值
      */
-    public String selectConfigByKey(String configKey)
+    public String getKey(String configKey)
     {
         return configService.selectConfigByKey(configKey);
     }

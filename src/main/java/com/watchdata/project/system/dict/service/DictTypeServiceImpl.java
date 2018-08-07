@@ -10,6 +10,7 @@ import com.watchdata.common.toolkits.Convert;
 import com.watchdata.common.toolkits.ShiroUtils;
 import com.watchdata.common.toolkits.StringUtils;
 import com.watchdata.project.system.dict.domain.DictType;
+import com.watchdata.project.system.dict.mapper.DictDataMapper;
 import com.watchdata.project.system.dict.mapper.DictTypeMapper;
 
 /**
@@ -23,6 +24,9 @@ public class DictTypeServiceImpl implements IDictTypeService
     @Autowired
     private DictTypeMapper dictTypeMapper;
 
+    @Autowired
+    private DictDataMapper dictDataMapper;
+
     /**
      * 根据条件分页查询字典类型
      * 
@@ -33,6 +37,17 @@ public class DictTypeServiceImpl implements IDictTypeService
     public List<DictType> selectDictTypeList(DictType dictType)
     {
         return dictTypeMapper.selectDictTypeList(dictType);
+    }
+
+    /**
+     * 根据所有字典类型
+     * 
+     * @return 字典类型集合信息
+     */
+    @Override
+    public List<DictType> selectDictTypeAll()
+    {
+        return dictTypeMapper.selectDictTypeAll();
     }
 
     /**
@@ -66,8 +81,17 @@ public class DictTypeServiceImpl implements IDictTypeService
      * @return 结果
      */
     @Override
-    public int deleteDictTypeByIds(String ids)
+    public int deleteDictTypeByIds(String ids) throws Exception
     {
+        Long[] dictIds = Convert.toLongArray(ids);
+        for (Long dictId : dictIds)
+        {
+            DictType dictType = selectDictTypeById(dictId);
+            if (dictDataMapper.countDictDataByType(dictType.getDictType()) > 0)
+            {
+                throw new Exception(String.format("%1$s已分配,不能删除", dictType.getDictName()));
+            }
+        }
         return dictTypeMapper.deleteDictTypeByIds(Convert.toLongArray(ids));
     }
 
@@ -78,19 +102,25 @@ public class DictTypeServiceImpl implements IDictTypeService
      * @return 结果
      */
     @Override
-    public int saveDictType(DictType dictType)
+    public int insertDictType(DictType dictType)
     {
-        Long dictId = dictType.getDictId();
-        if (StringUtils.isNotNull(dictId))
-        {
-            dictType.setUpdateBy(ShiroUtils.getLoginName());
-            return dictTypeMapper.updateDictType(dictType);
-        }
-        else
-        {
-            dictType.setCreateBy(ShiroUtils.getLoginName());
-            return dictTypeMapper.insertDictType(dictType);
-        }
+        dictType.setCreateBy(ShiroUtils.getLoginName());
+        return dictTypeMapper.insertDictType(dictType);
+    }
+
+    /**
+     * 修改保存字典类型信息
+     * 
+     * @param dictType 字典类型信息
+     * @return 结果
+     */
+    @Override
+    public int updateDictType(DictType dictType)
+    {
+        dictType.setUpdateBy(ShiroUtils.getLoginName());
+        DictType oldDict = dictTypeMapper.selectDictTypeById(dictType.getDictId());
+        dictDataMapper.updateDictDataType(oldDict.getDictType(), dictType.getDictType());
+        return dictTypeMapper.updateDictType(dictType);
     }
 
     /**

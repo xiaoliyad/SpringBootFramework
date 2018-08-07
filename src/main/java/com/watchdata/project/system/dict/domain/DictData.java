@@ -22,6 +22,10 @@ public class DictData extends BaseEntity
     private String dictType;
     /** 字典样式 */
     private String cssClass;
+
+    /** 表格字典样式 */
+    private String listClass;
+
     /** 是否默认（Y是 N否） */
     private String isDefault;
     /** 状态（0正常 1停用） */
@@ -85,6 +89,16 @@ public class DictData extends BaseEntity
     public void setCssClass(String cssClass)
     {
         this.cssClass = cssClass;
+    }
+
+    public String getListClass()
+    {
+        return listClass;
+    }
+
+    public void setListClass(String listClass)
+    {
+        this.listClass = listClass;
     }
 
     public String getIsDefault()

@@ -3,7 +3,7 @@ trace: false # Enable trace logs.
 # 项目名称、版本、版权年份
 system:
   name: SpringBootFramework
-  version: 1.1.1
+  version: 1.0.0
   copyrightYear: 2018
 
 #开发环境配置
@@ -49,10 +49,11 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
   profiles: 
     active: druid
-  http:
-    multipart:
-      max-file-size: 10Mb
-      max-request-size: 10Mb
+  #文件上传
+  servlet:
+     multipart:
+       max-file-size:  30MB
+       max-request-size:  30MB
   devtools:
     restart:
       enabled: true  # Enable automatic restart. 

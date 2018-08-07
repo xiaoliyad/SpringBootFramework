@@ -27,7 +27,16 @@ public interface IDictDataService
      * @return 字典数据集合信息
      */
     public List<DictData> selectDictDataByType(String dictType);
-    
+
+    /**
+     * 根据字典类型和字典键值查询字典数据信息
+     * 
+     * @param dictType 字典类型
+     * @param dictValue 字典键值
+     * @return 字典标签
+     */
+    public String selectDictLabel(String dictType, String dictValue);
+
     /**
      * 根据字典数据ID查询信息
      * 
@@ -35,7 +44,7 @@ public interface IDictDataService
      * @return 字典数据
      */
     public DictData selectDictDataById(Long dictCode);
-    
+
     /**
      * 通过字典ID删除字典数据信息
      * 
@@ -53,11 +62,19 @@ public interface IDictDataService
     public int deleteDictDataByIds(String ids);
 
     /**
-     * 保存字典数据信息
+     * 新增保存字典数据信息
      * 
      * @param dictData 字典数据信息
      * @return 结果
      */
-    public int saveDictData(DictData dictData);
+    public int insertDictData(DictData dictData);
+
+    /**
+     * 修改保存字典数据信息
+     * 
+     * @param dictData 字典数据信息
+     * @return 结果
+     */
+    public int updateDictData(DictData dictData);
 
 }

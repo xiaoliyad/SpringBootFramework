@@ -26,9 +26,20 @@ public class DeptServiceImpl implements IDeptService
     private DeptMapper deptMapper;
 
     /**
-     * 查询部门管理集合
+     * 查询部门管理数据
      * 
-     * @return 所有部门信息
+     * @return 部门信息集合
+     */
+    @Override
+    public List<Dept> selectDeptList(Dept dept)
+    {
+        return deptMapper.selectDeptList(dept);
+    }
+
+    /**
+     * 查询部门所有数据
+     * 
+     * @return 部门信息集合
      */
     @Override
     public List<Dept> selectDeptAll()
@@ -55,6 +66,7 @@ public class DeptServiceImpl implements IDeptService
                 deptMap.put("id", dept.getDeptId());
                 deptMap.put("pId", dept.getParentId());
                 deptMap.put("name", dept.getDeptName());
+                deptMap.put("title", dept.getDeptName());
                 trees.add(deptMap);
             }
         }
@@ -107,18 +119,23 @@ public class DeptServiceImpl implements IDeptService
      * @return 结果
      */
     @Override
-    public int saveDept(Dept dept)
+    public int insertDept(Dept dept)
     {
-        if (StringUtils.isNotNull(dept.getDeptId()))
-        {
-            dept.setUpdateBy(ShiroUtils.getLoginName());
-            return deptMapper.updateDept(dept);
-        }
-        else
-        {
-            dept.setCreateBy(ShiroUtils.getLoginName());
-            return deptMapper.insertDept(dept);
-        }
+        dept.setCreateBy(ShiroUtils.getLoginName());
+        return deptMapper.insertDept(dept);
+    }
+
+    /**
+     * 修改保存部门信息
+     * 
+     * @param dept 部门信息
+     * @return 结果
+     */
+    @Override
+    public int updateDept(Dept dept)
+    {
+        dept.setUpdateBy(ShiroUtils.getLoginName());
+        return deptMapper.updateDept(dept);
     }
 
     /**

@@ -44,14 +44,6 @@ public interface PostMapper
     public Post selectPostById(Long postId);
 
     /**
-     * 通过岗位ID删除岗位信息
-     * 
-     * @param postId 岗位ID
-     * @return 结果
-     */
-    public int deletePostById(Long postId);
-
-    /**
      * 批量删除岗位信息
      * 
      * @param ids 需要删除的数据ID
@@ -74,5 +66,21 @@ public interface PostMapper
      * @return 结果
      */
     public int insertPost(Post post);
+
+    /**
+     * 校验岗位名称
+     * 
+     * @param postName 岗位名称
+     * @return 结果
+     */
+    public Post checkPostNameUnique(String postName);
+
+    /**
+     * 校验岗位编码
+     * 
+     * @param postCode 岗位编码
+     * @return 结果
+     */
+    public Post checkPostCodeUnique(String postCode);
 
 }

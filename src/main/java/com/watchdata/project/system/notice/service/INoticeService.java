@@ -43,14 +43,6 @@ public interface INoticeService
     public int updateNotice(Notice notice);
 
     /**
-     * 保存公告
-     * 
-     * @param notice 公告信息
-     * @return 结果
-     */
-    public int saveNotice(Notice notice);
-
-    /**
      * 删除公告信息
      * 
      * @param ids 需要删除的数据ID

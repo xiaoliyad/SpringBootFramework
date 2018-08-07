@@ -15,12 +15,12 @@ $.validator.setDefaults({
 
 function login() {
 	$.modal.loading($("#btnSubmit").data("loading"));
-	var username = $("input[name='username']").val().trim();
-    var password = $("input[name='password']").val().trim();
+	var username = $.common.trim($("input[name='username']").val());
+    var password = $.common.trim($("input[name='password']").val());
     var validateCode = $("input[name='validateCode']").val();
     var rememberMe = $("input[name='rememberme']").is(':checked');
     $.ajax({
-        type: "POST",
+        type: "post",
         url: ctx + "login",
         data: {
             "username": username,
@@ -49,20 +49,14 @@ function validateRule() {
             },
             password: {
                 required: true
-            },
-            validateCode: {
-                required: true
             }
         },
         messages: {
             username: {
-            	required: icon + "请输入您的用户名"
+                required: icon + "请输入您的用户名",
             },
             password: {
-            	required: icon + "请输入您的密码"
-            },
-            validateCode:{
-            	required: icon + "请输入验证码"
+                required: icon + "请输入您的密码",
             }
         }
     })

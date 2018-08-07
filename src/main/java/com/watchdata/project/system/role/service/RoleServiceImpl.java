@@ -137,7 +137,7 @@ public class RoleServiceImpl implements IRoleService
      * @throws Exception
      */
     @Override
-    public void deleteRoleByIds(String ids) throws Exception
+    public int deleteRoleByIds(String ids) throws Exception
     {
         Long[] roleIds = Convert.toLongArray(ids);
         for (Long roleId : roleIds)
@@ -148,33 +148,39 @@ public class RoleServiceImpl implements IRoleService
                 throw new Exception(String.format("%1$s已分配,不能删除", role.getRoleName()));
             }
         }
-        roleMapper.deleteRoleByIds(roleIds);
+        return roleMapper.deleteRoleByIds(roleIds);
     }
 
     /**
-     * 保存角色信息
+     * 新增保存角色信息
      * 
      * @param role 角色信息
      * @return 结果
      */
     @Override
-    public int saveRole(Role role)
+    public int insertRole(Role role)
     {
-        Long roleId = role.getRoleId();
-        if (StringUtils.isNotNull(roleId))
-        {
-            role.setUpdateBy(ShiroUtils.getLoginName());
-            // 修改角色信息
-            roleMapper.updateRole(role);
-            // 删除角色与菜单关联
-            roleMenuMapper.deleteRoleMenuByRoleId(roleId);
-        }
-        else
-        {
-            role.setCreateBy(ShiroUtils.getLoginName());
-            // 新增角色信息
-            roleMapper.insertRole(role);
-        }
+        role.setCreateBy(ShiroUtils.getLoginName());
+        // 新增角色信息
+        roleMapper.insertRole(role);
+        ShiroUtils.clearCachedAuthorizationInfo();
+        return insertRoleMenu(role);
+    }
+
+    /**
+     * 修改保存角色信息
+     * 
+     * @param role 角色信息
+     * @return 结果
+     */
+    @Override
+    public int updateRole(Role role)
+    {
+        role.setUpdateBy(ShiroUtils.getLoginName());
+        // 修改角色信息
+        roleMapper.updateRole(role);
+        // 删除角色与菜单关联
+        roleMenuMapper.deleteRoleMenuByRoleId(role.getRoleId());
         ShiroUtils.clearCachedAuthorizationInfo();
         return insertRoleMenu(role);
     }
@@ -223,6 +229,24 @@ public class RoleServiceImpl implements IRoleService
             return UserConstants.ROLE_NAME_NOT_UNIQUE;
         }
         return UserConstants.ROLE_NAME_UNIQUE;
+    }
+    
+    /**
+     * 校验角色权限是否唯一
+     * 
+     * @param role 角色信息
+     * @return 结果
+     */
+    @Override
+    public String checkRoleKeyUnique(Role role)
+    {
+        Long roleId = StringUtils.isNull(role.getRoleId()) ? -1L : role.getRoleId();
+        Role info = roleMapper.checkRoleKeyUnique(role.getRoleKey());
+        if (StringUtils.isNotNull(info) && info.getRoleId().longValue() != roleId.longValue())
+        {
+            return UserConstants.ROLE_KEY_NOT_UNIQUE;
+        }
+        return UserConstants.ROLE_KEY_UNIQUE;
     }
 
     /**

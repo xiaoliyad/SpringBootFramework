@@ -50,21 +50,13 @@ public class JobLogController extends BaseController
         return getDataTable(list);
     }
 
+
     @Log(title = "调度日志", action = BusinessType.DELETE)
     @RequiresPermissions("monitor:job:remove")
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids)
     {
-        try
-        {
-            jobLogService.deleteJobLogByIds(ids);
-            return success();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return error(e.getMessage());
-        }
+        return toAjax(jobLogService.deleteJobLogByIds(ids));
     }
 }

@@ -41,7 +41,7 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">性别：</label>
 				<div class="col-sm-8">
-					<select id="sex" class="form-control m-b" th:with="type=${@dictService.selectDictData('sys_user_sex')}">
+					<select id="sex" class="form-control m-b" th:with="type=${@dict.getType('sys_user_sex')}">
 	                    <option th:each="dict : ${type}" th:text="${dict['dictLabel']}" th:value="${dict['dictValue']}" th:field="*{sex}"></option>
 	                </select>
 				</div>
@@ -62,7 +62,7 @@
 				<label class="col-sm-3 control-label">岗位：</label>
 				<div class="col-sm-8">
 					<select id="post" name="post" class="form-control select2-hidden-accessible" multiple="">
-						<option th:each="post:${posts}" th:value="${post.postId}" th:text="${post.postName}" th:selected="${post.flag}"></option>
+						<option th:each="post:${posts}" th:value="${post.postId}" th:text="${post.postName}" th:selected="${post.flag}" th:disabled="${post.status == '1'}"></option>
 					</select>
 					
 				</div>
@@ -71,7 +71,7 @@
 				<label class="col-sm-3 control-label">角色：</label>
 				<div class="col-sm-8">
 					<label th:each="role:${roles}" class="checkbox-inline i-checks">
-						<input name="role" type="checkbox" th:value="${role.roleId}" th:text="${role.roleName}" th:checked="${role.flag}">
+						<input name="role" type="checkbox" th:value="${role.roleId}" th:text="${role.roleName}" th:checked="${role.flag}" th:disabled="${role.status == '1'}">
 					</label>
 				</div>
 			</div>
@@ -165,7 +165,7 @@
         	$.ajax({
         		cache : true,
         		type : "POST",
-        		url : ctx + "system/user/save",
+        		url : ctx + "system/user/edit",
         		data : {
         			"userId": userId,
         			"deptId": deptId,

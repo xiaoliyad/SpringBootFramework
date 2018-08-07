@@ -5,16 +5,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.watchdata.framework.aspectj.lang.annotation.Log;
 import com.watchdata.framework.aspectj.lang.constant.BusinessType;
 import com.watchdata.framework.web.controller.BaseController;
 import com.watchdata.framework.web.domain.AjaxResult;
+import com.watchdata.framework.web.service.DictService;
 import com.watchdata.project.system.user.domain.User;
 import com.watchdata.project.system.user.service.IUserService;
 
@@ -34,31 +36,24 @@ public class ProfileController extends BaseController
     @Autowired
     private IUserService userService;
 
+    @Autowired
+    private DictService dict;
+
     /**
      * 个人信息
      */
     @GetMapping()
-    public String profile(Model model)
+    public String profile(ModelMap mmap)
     {
         User user = getUser();
-        String sex = user.getSex();
-        if ("0".equals(sex))
-        {
-            user.setSex("性别：男");
-        }
-        else if ("1".equals(sex))
-        {
-            user.setSex("性别：女");
-        }
-        String roleGroup = userService.selectUserRoleGroup(user.getUserId());
-        String postGroup = userService.selectUserPostGroup(user.getUserId());
-        model.addAttribute("user", user);
-        model.addAttribute("roleGroup", roleGroup);
-        model.addAttribute("postGroup", postGroup);
+        user.setSex(dict.getLabel("sys_user_sex", user.getSex()));
+        mmap.put("user", user);
+        mmap.put("roleGroup", userService.selectUserRoleGroup(user.getUserId()));
+        mmap.put("postGroup", userService.selectUserPostGroup(user.getUserId()));
         return prefix + "/profile";
     }
 
-    @RequestMapping("/checkPassword")
+    @GetMapping("/checkPassword")
     @ResponseBody
     public boolean checkPassword(String password)
     {
@@ -72,10 +67,9 @@ public class ProfileController extends BaseController
     }
 
     @GetMapping("/resetPwd/{userId}")
-    public String resetPwd(@PathVariable("userId") Long userId, Model model)
+    public String resetPwd(@PathVariable("userId") Long userId, ModelMap mmap)
     {
-        User user = userService.selectUserById(userId);
-        model.addAttribute("user", user);
+        mmap.put("user", userService.selectUserById(userId));
         return prefix + "/resetPwd";
     }
 
@@ -96,36 +90,32 @@ public class ProfileController extends BaseController
     /**
      * 修改用户
      */
-    @Log(title = "个人信息", action = BusinessType.UPDATE)
     @GetMapping("/edit/{userId}")
-    public String edit(@PathVariable("userId") Long userId, Model model)
+    public String edit(@PathVariable("userId") Long userId, ModelMap mmap)
     {
-        User user = userService.selectUserById(userId);
-        model.addAttribute("user", user);
+        mmap.put("user", userService.selectUserById(userId));
         return prefix + "/edit";
     }
 
     /**
      * 修改头像
      */
-    @Log(title = "个人信息", action = BusinessType.UPDATE)
     @GetMapping("/avatar/{userId}")
-    public String avatar(@PathVariable("userId") Long userId, Model model)
+    public String avatar(@PathVariable("userId") Long userId, ModelMap mmap)
     {
-        User user = userService.selectUserById(userId);
-        model.addAttribute("user", user);
+        mmap.put("user", userService.selectUserById(userId));
         return prefix + "/avatar";
     }
 
     /**
      * 修改用户
      */
-    @Log(title = "个人信息", action = BusinessType.SAVE)
+    @Log(title = "个人信息", action = BusinessType.UPDATE)
     @PostMapping("/update")
     @ResponseBody
     public AjaxResult update(User user)
     {
-        if (userService.updateUser(user) > 0)
+        if (userService.updateUserInfo(user) > 0)
         {
             setUser(userService.selectUserById(user.getUserId()));
             return success();

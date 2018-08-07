@@ -35,6 +35,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="status"   column="dept_status" />
 	</resultMap>
 	
+	<sql id="selectUserVo">
+        select  u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_time, u.remark,
+       		    d.dept_id, d.parent_id, d.dept_name, d.order_num, d.status as dept_status
+		from sys_user u
+			 left join sys_dept d on u.dept_id = d.dept_id
+			 left join sys_user_role ur on u.user_id = ur.user_id
+    </sql>
+	
 	<select id="selectUserList" parameterType="User" resultMap="UserResult">
 		select u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.password, u.sex, u.avatar, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark, d.dept_name from sys_user u
 		left join sys_dept d on u.dept_id = d.dept_id
@@ -48,40 +56,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="phonenumber != null and phonenumber != ''">
 			AND u.phonenumber like concat('%', #{phonenumber}, '%')
 		</if>
+		<if test="params != null and params.beginTime != ''"><!-- 开始时间检索 -->
+			AND date_format(u.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+		</if>
+		<if test="params != null and params.endTime != ''"><!-- 结束时间检索 -->
+			AND date_format(u.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+		</if>
 		<if test="deptId != null and parentId != null and parentId != 0">
 			AND u.dept_id IN (SELECT t.dept_id FROM sys_dept t WHERE t.dept_id = #{deptId} OR t.parent_id = #{deptId})
 		</if>
 	</select>
 	
 	<select id="selectUserByLoginName" parameterType="String" resultMap="UserResult">
-		select  u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.login_ip, u.login_date, u.create_time, u.remark,
-       		    d.dept_id, d.parent_id, d.dept_name, d.order_num, d.status as dept_status
-		from sys_user u
-			 left join sys_dept d on u.dept_id = d.dept_id
-			 left join sys_user_role ur on u.user_id = ur.user_id
+	    <include refid="selectUserVo"/>
 		where u.login_name = #{userName}
 	</select>
 	
 	<select id="selectUserByPhoneNumber" parameterType="String" resultMap="UserResult">
-		select  u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.login_ip, u.login_date, u.create_time, u.remark,
-       		    d.dept_id, d.parent_id, d.dept_name, d.order_num, d.status as dept_status
-		from sys_user u
-			 left join sys_dept d on u.dept_id = d.dept_id
-			 left join sys_user_role ur on u.user_id = ur.user_id
+		<include refid="selectUserVo"/>
 		where u.phonenumber = #{phonenumber}
 	</select>
 	
 	<select id="selectUserByEmail" parameterType="String" resultMap="UserResult">
-		select  u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.login_ip, u.login_date, u.create_time, u.remark,
-       		    d.dept_id, d.parent_id, d.dept_name, d.order_num, d.status as dept_status
-		from sys_user u
-			 left join sys_dept d on u.dept_id = d.dept_id
-			 left join sys_user_role ur on u.user_id = ur.user_id
+	    <include refid="selectUserVo"/>
 		where u.email = #{email}
 	</select>
 	
 	<select id="checkLoginNameUnique" parameterType="String" resultType="int">
-		select count(*) from sys_user where login_name=#{loginName}
+		select count(1) from sys_user where login_name=#{loginName}
 	</select>
 	
 	<select id="checkPhoneUnique" parameterType="String" resultMap="UserResult">
@@ -93,11 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="selectUserById" parameterType="Long" resultMap="UserResult">
-		select  u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.login_ip, u.login_date, u.create_time, u.remark,
-       		    d.dept_id, d.parent_id, d.dept_name, d.order_num, d.status as dept_status
-		from sys_user u
-			 left join sys_dept d on u.dept_id = d.dept_id
-			 left join sys_user_role ur on u.user_id = ur.user_id
+		<include refid="selectUserVo"/>
 		where u.user_id = #{userId}
 	</select>
 	
@@ -124,15 +122,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
  			<if test="password != null and password != ''">password = #{password},</if>
  			<if test="salt != null and salt != ''">salt = #{salt},</if>
- 			<if test="status !=null">status = #{status},</if>
+ 			<if test="status != null and status != ''">status = #{status},</if>
  			<if test="loginIp != null and loginIp != ''">login_ip = #{loginIp},</if>
  			<if test="loginDate != null">login_date = #{loginDate},</if>
  			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
  			<if test="remark != null and remark != ''">remark = #{remark},</if>
  			update_time = sysdate()
  		</set>
- 		where 1=1
- 		<if test="userId != null and userId  != ''">and user_id = #{userId}</if>
+ 		where user_id = #{userId}
 	</update>
  	
  	<insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="userId">
@@ -146,7 +143,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="sex != null and sex != ''">sex,</if>
  			<if test="password != null and password != ''">password,</if>
  			<if test="salt != null and salt != ''">salt,</if>
- 			<if test="status !=null and status != ''">status,</if>
+ 			<if test="status != null and status != ''">status,</if>
  			<if test="createBy != null and createBy != ''">create_by,</if>
  			<if test="remark != null and remark != ''">remark,</if>
  			create_time
@@ -160,44 +157,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="sex != null and sex != ''">#{sex},</if>
  			<if test="password != null and password != ''">#{password},</if>
  			<if test="salt != null and salt != ''">#{salt},</if>
- 			<if test="status !=null and status != ''">#{status},</if>
+ 			<if test="status != null and status != ''">#{status},</if>
  			<if test="createBy != null and createBy != ''">#{createBy},</if>
  			<if test="remark != null and remark != ''">#{remark},</if>
  			sysdate()
  		)
-	</insert>
-
-	<insert id="batchAddUser" useGeneratedKeys="true" keyProperty="userId" >
-		insert into sys_user(
-		dept_id,
-	    login_name,
-	    user_name,
-		email,
-		phonenumber,
-		sex,
-		password,
-		salt,
-		status,
-		create_by,
-		remark,
-		create_time
-		)values
-		<foreach item="item" index="index" collection="list" separator=",">
-		(
-		#{item.deptId},
-		#{item.loginName},
-		#{item.userName},
-		#{item.email},
-		#{item.phonenumber},
-		#{item.sex},
-		#{item.password},
-		#{item.salt},
-	    #{item.status},
-		#{item.createBy},
-		#{item.remark},
-		sysdate()
-		)
-		</foreach>
 	</insert>
 	
 </mapper> 

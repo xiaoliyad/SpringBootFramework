@@ -5,8 +5,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.apache.commons.beanutils.PropertyUtils;
-import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -14,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import com.watchdata.common.constant.ScheduleConstants;
+import com.watchdata.common.toolkits.BeanUtils;
 import com.watchdata.common.toolkits.SpringUtils;
 import com.watchdata.project.monitor.job.domain.Job;
 import com.watchdata.project.monitor.job.domain.JobLog;
@@ -34,17 +33,8 @@ public class ScheduleJob extends QuartzJobBean
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException
     {
-        // Job job = (Job) context.getMergedJobDataMap().get(ScheduleConstants.JOB_PARAM_KEY);
-        JobDataMap jobDataMap = context.getMergedJobDataMap();
         Job job = new Job();
-        try
-        {
-            PropertyUtils.copyProperties(job, jobDataMap.get(ScheduleConstants.JOB_PARAM_KEY));
-        }
-        catch (Exception e)
-        {
-            log.error("copyProperties执行异常  - ：", e);
-        }
+        BeanUtils.copyBeanProp(job, context.getMergedJobDataMap().get(ScheduleConstants.TASK_PROPERTIES));
 
         IJobLogService jobLogService = (IJobLogService) SpringUtils.getBean(IJobLogService.class);
 
@@ -52,7 +42,7 @@ public class ScheduleJob extends QuartzJobBean
         jobLog.setJobName(job.getJobName());
         jobLog.setJobGroup(job.getJobGroup());
         jobLog.setMethodName(job.getMethodName());
-        jobLog.setParams(job.getParams());
+        jobLog.setMethodParams(job.getMethodParams());
         jobLog.setCreateTime(new Date());
 
         long startTime = System.currentTimeMillis();
@@ -61,12 +51,12 @@ public class ScheduleJob extends QuartzJobBean
         {
             // 执行任务
             log.info("任务开始执行 - 名称：{} 方法：{}", job.getJobName(), job.getMethodName());
-            ScheduleRunnable task = new ScheduleRunnable(job.getJobName(), job.getMethodName(), job.getParams());
+            ScheduleRunnable task = new ScheduleRunnable(job.getJobName(), job.getMethodName(), job.getMethodParams());
             Future<?> future = service.submit(task);
             future.get();
             long times = System.currentTimeMillis() - startTime;
             // 任务状态 0：成功 1：失败
-            jobLog.setIsException(0);
+            jobLog.setStatus(0);
             jobLog.setJobMessage(job.getJobName() + " 总共耗时：" + times + "毫秒");
 
             log.info("任务执行结束 - 名称：{} 耗时：{} 毫秒", job.getJobName(), times);
@@ -78,7 +68,7 @@ public class ScheduleJob extends QuartzJobBean
             long times = System.currentTimeMillis() - startTime;
             jobLog.setJobMessage(job.getJobName() + " 总共耗时：" + times + "毫秒");
             // 任务状态 0：成功 1：失败
-            jobLog.setIsException(1);
+            jobLog.setStatus(1);
             jobLog.setExceptionInfo(e.toString());
         }
         finally

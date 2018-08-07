@@ -173,14 +173,9 @@ public class JobServiceImpl implements IJobService
      * @param job 调度信息
      */
     @Override
-    public int triggerJob(Job job)
+    public int run(Job job)
     {
-        int rows = jobMapper.updateJob(job);
-        if (rows > 0)
-        {
-            ScheduleUtils.run(scheduler, job);
-        }
-        return rows;
+        return ScheduleUtils.run(scheduler, selectJobById(job.getJobId()));
     }
 
     /**
@@ -189,7 +184,7 @@ public class JobServiceImpl implements IJobService
      * @param job 调度信息 调度信息
      */
     @Override
-    public int addJobCron(Job job)
+    public int insertJobCron(Job job)
     {
         job.setCreateBy(ShiroUtils.getLoginName());
         job.setStatus(ScheduleConstants.Status.PAUSE.getValue());
@@ -209,31 +204,11 @@ public class JobServiceImpl implements IJobService
     @Override
     public int updateJobCron(Job job)
     {
+        job.setUpdateBy(ShiroUtils.getLoginName());
         int rows = jobMapper.updateJob(job);
         if (rows > 0)
         {
             ScheduleUtils.updateScheduleJob(scheduler, job);
-        }
-        return rows;
-    }
-
-    /**
-     * 保存任务的时间表达式
-     * 
-     * @param job 调度信息
-     */
-    @Override
-    public int saveJobCron(Job job)
-    {
-        Long jobId = job.getJobId();
-        int rows = 0;
-        if (StringUtils.isNotNull(jobId))
-        {
-            rows = updateJobCron(job);
-        }
-        else
-        {
-            rows = addJobCron(job);
         }
         return rows;
     }

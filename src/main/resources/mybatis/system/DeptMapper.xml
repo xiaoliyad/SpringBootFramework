@@ -19,17 +19,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="updateBy"   column="update_by"   />
 		<result property="updateTime" column="update_time" />
 	</resultMap>
+	
+	<sql id="selectDeptVo">
+        select t.dept_id, t.parent_id, t.dept_name, t.order_num, t.leader, t.phone, t.email, t.status, t.create_by, t.create_time from sys_dept t
+    </sql>
 
 	<select id="selectDeptAll" resultMap="DeptResult">
-		select dept_id, parent_id, dept_name, order_num, leader, phone, email, status, create_by, create_time from sys_dept
+		<include refid="selectDeptVo"/>
 	</select>
 	
+	<select id="selectDeptList" parameterType="Dept" resultMap="DeptResult">
+        <include refid="selectDeptVo"/>
+        <where>
+			<if test="deptName != null and deptName != ''">
+				AND dept_name like concat('%', #{deptName}, '%')
+			</if>
+			<if test="status != null and status != ''">
+				AND status = #{status}
+			</if>
+		</where>
+    </select>
+	
 	<select id="checkDeptExistUser" parameterType="Long" resultType="int">
-		select count(*) from sys_user where dept_id = #{deptId}
+		select count(1) from sys_user where dept_id = #{deptId} and del_flag = '0'
 	</select>
 	
 	<select id="selectDeptCount" parameterType="Dept" resultType="int">
-		select count(*) from sys_dept
+		select count(1) from sys_dept
 		<where>
 			<if test="deptId != null and deptId != 0"> and dept_id = #{deptId} </if>
 			<if test="parentId != null and parentId != 0"> and parent_id = #{parentId} </if>
@@ -37,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="checkDeptNameUnique" parameterType="String" resultMap="DeptResult">
-		select t.dept_id, t.parent_id, t.dept_name, t.order_num, t.leader, t.phone, t.email, t.status from sys_dept t
+	    <include refid="selectDeptVo"/>
 		where dept_name=#{deptName}
 	</select>
 
@@ -83,12 +99,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="leader != null and leader != ''">leader = #{leader},</if>
  			<if test="phone != null and phone != ''">phone = #{phone},</if>
  			<if test="email != null and email != ''">email = #{email},</if>
- 			<if test="status !=null">status = #{status},</if>
+ 			<if test="status != null and status != ''">status = #{status},</if>
  			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
  			update_time = sysdate()
  		</set>
- 		where 1=1
- 		<if test="deptId != null and deptId  != ''">and dept_id = #{deptId}</if>
+ 		where dept_id = #{deptId}
 	</update>
 
 	<delete id="deleteDeptById" parameterType="Long">

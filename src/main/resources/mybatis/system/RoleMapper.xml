@@ -17,8 +17,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="remark"       column="remark"         />
 	</resultMap>
 	
+	<sql id="selectRoleVo">
+        select role_id, role_name, role_key, role_sort, status, create_time, remark from sys_role
+    </sql>
+	
 	<select id="selectRoleList" parameterType="Role" resultMap="RoleResult">
-		select role_id, role_name, role_key, role_sort, status, create_time, remark from sys_role
+		<include refid="selectRoleVo"/>
 		<where>
 			<if test="roleName != null and roleName != ''">
 				AND role_name like concat('%', #{roleName}, '%')
@@ -28,6 +32,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="roleKey != null and roleKey != ''">
 				AND role_key like concat('%', #{roleKey}, '%')
+			</if>
+			<if test="params != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+			</if>
+			<if test="params != null and params.endTime != ''"><!-- 结束时间检索 -->
+				and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
 			</if>
 		</where>
 	</select>
@@ -41,18 +51,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="selectRolesAll" resultMap="RoleResult">
-		SELECT role_id, role_name, role_key, role_sort, status, create_time, remark FROM sys_role
+		<include refid="selectRoleVo"/>
 	</select>
 	
 	<select id="selectRoleById" parameterType="Long" resultMap="RoleResult">
-		select role_id, role_name, role_key, role_sort, status, create_time, remark
-		from sys_role u
-		where u.role_id = #{roleId}
+		<include refid="selectRoleVo"/>
+		where role_id = #{roleId}
 	</select>
 	
 	<select id="checkRoleNameUnique" parameterType="String" resultMap="RoleResult">
-		select role_id, role_name, role_key, role_sort, status, create_time 
-		from sys_role where role_name=#{roleName}
+		<include refid="selectRoleVo"/>
+		 where role_name=#{roleName}
+	</select>
+	
+	<select id="checkRoleKeyUnique" parameterType="String" resultMap="RoleResult">
+		<include refid="selectRoleVo"/>
+		 where role_key=#{roleKey}
 	</select>
 	
 	<delete id="deleteRoleById" parameterType="Long">
@@ -72,13 +86,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="roleName != null and roleName != ''">role_name = #{roleName},</if>
  			<if test="roleKey != null and roleKey != ''">role_key = #{roleKey},</if>
  			<if test="roleSort != null and roleSort != ''">role_sort = #{roleSort},</if>
- 			<if test="status !=null">status = #{status},</if>
+ 			<if test="status != null and status != ''">status = #{status},</if>
  			<if test="remark != null and remark != ''">remark = #{remark},</if>
  			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
  			update_time = sysdate()
  		</set>
- 		where 1=1
- 		<if test="roleId != null">and role_id = #{roleId}</if>
+ 		where role_id = #{roleId}
 	</update>
  	
  	<insert id="insertRole" parameterType="Role" useGeneratedKeys="true" keyProperty="roleId">
@@ -87,7 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="roleName != null and roleName != ''">role_name,</if>
  			<if test="roleKey != null and roleKey != ''">role_key,</if>
  			<if test="roleSort != null and roleSort != ''">role_sort,</if>
- 			<if test="status !=null and status != ''">status,</if>
+ 			<if test="status != null and status != ''">status,</if>
  			<if test="remark != null and remark != ''">remark,</if>
  			<if test="createBy != null and createBy != ''">create_by,</if>
  			create_time
@@ -96,7 +109,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="roleName != null and roleName != ''">#{roleName},</if>
  			<if test="roleKey != null and roleKey != ''">#{roleKey},</if>
  			<if test="roleSort != null and roleSort != ''">#{roleSort},</if>
- 			<if test="status !=null and status != ''">#{status},</if>
+ 			<if test="status != null and status != ''">#{status},</if>
  			<if test="remark != null and remark != ''">#{remark},</if>
  			<if test="createBy != null and createBy != ''">#{createBy},</if>
  			sysdate()

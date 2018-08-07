@@ -19,11 +19,11 @@ public class JobLog extends BaseEntity
     /** 任务方法 */
     private String methodName;
     /** 方法参数 */
-    private String params;
+    private String methodParams;
     /** 日志信息 */
     private String jobMessage;
     /** 是否异常 */
-    private int isException;
+    private int status;
     /** 异常信息 */
     private String exceptionInfo;
 
@@ -67,14 +67,14 @@ public class JobLog extends BaseEntity
         this.methodName = methodName;
     }
 
-    public String getParams()
+    public String getMethodParams()
     {
-        return params;
+        return methodParams;
     }
 
-    public void setParams(String params)
+    public void setMethodParams(String methodParams)
     {
-        this.params = params;
+        this.methodParams = methodParams;
     }
 
     public String getJobMessage()
@@ -87,14 +87,14 @@ public class JobLog extends BaseEntity
         this.jobMessage = jobMessage;
     }
 
-    public int getIsException()
+    public int getStatus()
     {
-        return isException;
+        return status;
     }
 
-    public void setIsException(int isException)
+   public void setStatus(int status)
     {
-        this.isException = isException;
+        this.status = status;
     }
 
     public String getExceptionInfo()
@@ -111,7 +111,7 @@ public class JobLog extends BaseEntity
     public String toString()
     {
         return "JobLog [jobLogId=" + jobLogId + ", jobName=" + jobName + ", jobGroup=" + jobGroup + ", methodName="
-                + methodName + ", params=" + params + ", jobMessage=" + jobMessage + ", isException=" + isException
+                + methodName + ", methodParams=" + methodParams + ", jobMessage=" + jobMessage + ", status=" + status
                 + ", exceptionInfo=" + exceptionInfo + "]";
     }
 

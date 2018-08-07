@@ -7,8 +7,8 @@
      <div class="container-div">
 		<div class="row">
 			<div class="col-sm-12 select-info">
-				<form id="operlog-form">
-					<div class="select-list gd">
+				<form id="config-form">
+					<div class="select-list">
 						<ul>
 							<li>
 								参数名称：<input type="text" name="configName"/>
@@ -17,10 +17,16 @@
 								参数键名：<input type="text" name="configKey"/>
 							</li>
 							<li>
-								系统内置：<select name="configType" th:with="type=${@dictService.selectDictData('sys_yes_no')}">
+								系统内置：<select name="configType" th:with="type=${@dict.getType('sys_yes_no')}">
 									<option value="">所有</option>
 									<option th:each="e : ${type}" th:text="${e['dictLabel']}" th:value="${e['dictValue']}"></option>
 								</select>
+							</li>
+							<li class="time">
+								<label>创建时间： </label>
+								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+								<span>-</span>
+								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
 							</li>
 							<li>
 								<a class="btn btn-w-m btn-search" onclick="$.table.search($('form').attr('id'))"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -38,15 +44,16 @@
 		            <i class="fa fa-trash-o"></i> 删除
 		        </a>
 	        </div>
-	        <div class="col-sm-12 select-info order-table">
+	        <div class="col-sm-12 select-info table-striped">
 	            <table id="bootstrap-table" data-mobile-responsive="true"></table>
 	        </div>
 	    </div>
 	</div>
     <div th:include="include :: footer"></div>
     <script th:inline="javascript">
-        var editFlag = [[${@permissionService.hasPermi('system:config:edit')}]];
-        var removeFlag = [[${@permissionService.hasPermi('system:config:remove')}]];
+        var editFlag = [[${@permission.hasPermi('system:config:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:config:remove')}]];
+        var datas = [[${@dict.getType('sys_yes_no')}]];
         var prefix = ctx + "system/config"
 
         $(function() {
@@ -85,11 +92,7 @@
                     title: '系统内置',
                     align: 'center',
                     formatter: function(value, row, index) {
-                        if (value == 'Y') {
-                            return '<span class="badge badge-primary">是</span>';
-                        } else if (value == 'N') {
-                            return '<span class="badge badge-danger">否</span>';
-                        }
+                    	return $.table.selectDictLabel(datas, value);
                     }
                 },
                 {

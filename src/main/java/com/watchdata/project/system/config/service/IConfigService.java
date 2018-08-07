@@ -52,22 +52,6 @@ public interface IConfigService
     public int updateConfig(Config config);
 
     /**
-     * 保存参数配置
-     * 
-     * @param config 参数配置信息
-     * @return 结果
-     */
-    public int saveConfig(Config config);
-
-    /**
-     * 删除参数配置信息
-     * 
-     * @param configId 参数配置ID
-     * @return 结果
-     */
-    public int deleteConfigById(Integer configId);
-
-    /**
      * 批量删除参数配置信息
      * 
      * @param ids 需要删除的数据ID

@@ -1,17 +1,19 @@
 package com.watchdata.project.system.role.controller;
 
 import java.util.List;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.watchdata.common.toolkits.StringUtils;
 import com.watchdata.framework.aspectj.lang.annotation.Log;
 import com.watchdata.framework.aspectj.lang.constant.BusinessType;
 import com.watchdata.framework.web.controller.BaseController;
@@ -55,42 +57,47 @@ public class RoleController extends BaseController
     /**
      * 新增角色
      */
-    @RequiresPermissions("system:role:add")
-    @Log(title = "角色管理", action = BusinessType.INSERT)
     @GetMapping("/add")
-    public String add(Model model)
+    public String add()
     {
         return prefix + "/add";
     }
 
     /**
+     * 新增保存角色
+     */
+    @RequiresPermissions("system:role:add")
+    @Log(title = "角色管理", action = BusinessType.INSERT)
+    @PostMapping("/add")
+    @Transactional(rollbackFor = Exception.class)
+    @ResponseBody
+    public AjaxResult addSave(Role role)
+    {
+        return toAjax(roleService.insertRole(role));
+
+    }
+
+    /**
      * 修改角色
      */
-    @RequiresPermissions("system:role:edit")
-    @Log(title = "角色管理", action = BusinessType.UPDATE)
     @GetMapping("/edit/{roleId}")
-    public String edit(@PathVariable("roleId") Long roleId, Model model)
+    public String edit(@PathVariable("roleId") Long roleId, ModelMap mmap)
     {
-        Role role = roleService.selectRoleById(roleId);
-        model.addAttribute("role", role);
+        mmap.put("role", roleService.selectRoleById(roleId));
         return prefix + "/edit";
     }
 
     /**
-     * 保存角色
+     * 修改保存角色
      */
-    @RequiresPermissions("system:role:save")
-    @Log(title = "角色管理", action = BusinessType.SAVE)
-    @PostMapping("/save")
+    @RequiresPermissions("system:role:edit")
+    @Log(title = "角色管理", action = BusinessType.UPDATE)
+    @PostMapping("/edit")
     @Transactional(rollbackFor = Exception.class)
     @ResponseBody
-    public AjaxResult save(Role role)
+    public AjaxResult editSave(Role role)
     {
-        if (roleService.saveRole(role) > 0)
-        {
-            return success();
-        }
-        return error();
+        return toAjax(roleService.updateRole(role));
     }
 
     @RequiresPermissions("system:role:remove")
@@ -101,8 +108,7 @@ public class RoleController extends BaseController
     {
         try
         {
-            roleService.deleteRoleByIds(ids);
-            return success();
+            return toAjax(roleService.deleteRoleByIds(ids));
         }
         catch (Exception e)
         {
@@ -121,6 +127,21 @@ public class RoleController extends BaseController
         if (role != null)
         {
             uniqueFlag = roleService.checkRoleNameUnique(role);
+        }
+        return uniqueFlag;
+    }
+    
+    /**
+     * 校验角色权限
+     */
+    @PostMapping("/checkRoleKeyUnique")
+    @ResponseBody
+    public String checkRoleKeyUnique(Role role)
+    {
+        String uniqueFlag = "0";
+        if (StringUtils.isNotNull(role))
+        {
+            uniqueFlag = roleService.checkRoleKeyUnique(role);
         }
         return uniqueFlag;
     }

@@ -13,12 +13,12 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
-import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.watchdata.common.toolkits.StringUtils;
 import com.watchdata.framework.shiro.realm.UserRealm;
 import com.watchdata.framework.shiro.session.OnlineSessionDAO;
 import com.watchdata.framework.shiro.session.OnlineSessionFactory;
@@ -87,9 +87,18 @@ public class ShiroConfig
     @Bean
     public EhCacheManager getEhCacheManager()
     {
+        net.sf.ehcache.CacheManager cacheManager = net.sf.ehcache.CacheManager.getCacheManager("ruoyi");
         EhCacheManager em = new EhCacheManager();
-        em.setCacheManagerConfigFile("classpath:ehcache/ehcache-shiro.xml");
-        return em;
+        if (StringUtils.isNull(cacheManager))
+        {
+            em.setCacheManagerConfigFile("classpath:ehcache/ehcache-shiro.xml");
+            return em;
+        }
+        else
+        {
+            em.setCacheManager(cacheManager);
+            return em;
+        }
     }
 
     /**
@@ -324,17 +333,6 @@ public class ShiroConfig
         cookieRememberMeManager.setCookie(rememberMeCookie());
         cookieRememberMeManager.setCipherKey(Base64.decode("fCq+/xW488hMTCD+cmJ3aQ=="));
         return cookieRememberMeManager;
-    }
-
-    /**
-     * 开启Shiro代理
-     */
-    @Bean
-    public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator()
-    {
-        DefaultAdvisorAutoProxyCreator proxyCreator = new DefaultAdvisorAutoProxyCreator();
-        proxyCreator.setProxyTargetClass(true);
-        return proxyCreator;
     }
 
     /**

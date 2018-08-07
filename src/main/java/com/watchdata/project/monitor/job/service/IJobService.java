@@ -74,7 +74,7 @@ public interface IJobService
      * @param job 调度信息
      * @return 结果
      */
-    public int triggerJob(Job job);
+    public int run(Job job);
 
     /**
      * 新增任务表达式
@@ -82,7 +82,7 @@ public interface IJobService
      * @param job 调度信息
      * @return 结果
      */
-    public int addJobCron(Job job);
+    public int insertJobCron(Job job);
 
     /**
      * 更新任务的时间表达式
@@ -92,11 +92,4 @@ public interface IJobService
      */
     public int updateJobCron(Job job);
 
-    /**
-     * 保存任务的时间表达式
-     * 
-     * @param job 调度信息
-     * @return 结果
-     */
-    public int saveJobCron(Job job);
 }

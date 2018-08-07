@@ -56,6 +56,7 @@ public class NoticeServiceImpl implements INoticeService
     @Override
     public int insertNotice(Notice notice)
     {
+        notice.setCreateBy(ShiroUtils.getLoginName());
         return noticeMapper.insertNotice(notice);
     }
 
@@ -68,33 +69,8 @@ public class NoticeServiceImpl implements INoticeService
     @Override
     public int updateNotice(Notice notice)
     {
+        notice.setUpdateBy(ShiroUtils.getLoginName());
         return noticeMapper.updateNotice(notice);
-    }
-
-    /**
-     * 保存公告
-     * 
-     * @param notice 公告信息
-     * @return 结果
-     */
-    @Override
-    public int saveNotice(Notice notice)
-    {
-        Integer noticeId = notice.getNoticeId();
-        int rows = 0;
-        if (StringUtils.isNotNull(noticeId))
-        {
-            notice.setUpdateBy(ShiroUtils.getLoginName());
-            // 修改公告
-            rows = noticeMapper.updateNotice(notice);
-        }
-        else
-        {
-            notice.setCreateBy(ShiroUtils.getLoginName());
-            // 新增公告
-            rows = noticeMapper.insertNotice(notice);
-        }
-        return rows;
     }
 
     /**

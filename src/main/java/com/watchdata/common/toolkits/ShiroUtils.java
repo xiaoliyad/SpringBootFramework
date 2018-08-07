@@ -6,6 +6,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
+
 import com.watchdata.framework.shiro.realm.UserRealm;
 import com.watchdata.project.system.user.domain.User;
 
@@ -34,7 +35,14 @@ public class ShiroUtils
 
     public static User getUser()
     {
-        return (User) getSubjct().getPrincipal();
+        User user = null;
+        Object obj = getSubjct().getPrincipal();
+        if (StringUtils.isNotNull(obj))
+        {
+            user = new User();
+            BeanUtils.copyBeanProp(user, obj);
+        }
+        return user;
     }
 
     public static void setUser(User user)
